@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Profile Info</title>
+  <link rel="stylesheet" href="/faculty/profile/style.css">
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="card">
+    <div class="card__image">
+         <div id="profile-picture"></div>
+    </div>
+    <div class="card__name">
+        <p id ="name"><%= faculty.name %></p>
+    </div>
+    <p><strong>E-Mail: </strong> <%= faculty.email %></p>
+    <p><strong>Department: </strong> <%= faculty.department %></p>
+    <p><strong>Phone-Number:</strong> <%= faculty.phone_number %></p>
+</div>
+<!-- partial -->
+<script>
+    var nameElement = document.getElementById('name');
+    var profilePictureElement = document.getElementById('profile-picture');
+
+    var name = nameElement.textContent;
+    var firstLetter = name.charAt(0);
+
+    profilePictureElement.textContent = firstLetter;
+</script>
+</body>
+</html>

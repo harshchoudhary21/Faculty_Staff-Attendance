@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Faculty DashBoard</title>
+  <link rel="stylesheet" href="/faculty/dashboard/CalenderStyle.css">
+  <link rel="stylesheet" href="/faculty/dashboard/style.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+</head>
+
+<body>
+  <div class="container">
+    <nav>
+      <ul>
+        <li class="logo">
+          <span class="nav-item">Hello, <%= faculty.name %>!</span>
+        </li>
+
+        <li><a href="#">
+            <i class="fas fa-home"></i>
+            <span class="nav-item">Home</span>
+          </a></li>
+
+        <li><a href="/facultydashboard/<%= faculty.fid %>/profile">
+            <i class="fas fa-users"></i>
+            <span class="nav-item">Profile</span>
+          </a></li>
+
+        <li><a href="/notice">
+            <i class="fas fa-bell"></i>
+            <span class="nav-item">Notice</span>
+          </a></li>
+
+        <li><a href="/attendance">
+          <i class="fas fa-calendar-check"></i>
+          <span class="nav-item">View Attendance</span>
+        </a></li>
+
+        <li><a href="/logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="nav-item">Logout</span>
+          </a></li>
+
+      </ul>
+    </nav>
+    <section class="main">
+      <section class="main">
+        <div class="main-top">
+          <h1>My Course</h1>
+          <i class="fas fa-users-cog"></i>
+        </div>
+        <div class="main-skills">
+          <% courses.forEach(function(course) { %>
+            <div class="card">
+              <i class="fas fa-laptop-code"></i>
+              <h3>
+                <%= course.course_name %>
+              </h3>
+             
+            </div>
+            <% }); %>
+        </div>
+
+        <div class="wrapper">
+          <div class="container-calendar">
+            <div id="left">
+              <h1>Calendar</h1>
+              <div id="event-section">
+                <h3>Add Event</h3>
+                <input type="date" id="eventDate">
+                <input type="text" id="eventTitle" placeholder="Event Title">
+                <input type="text" id="eventDescription" placeholder="Event Description">
+                <button id="addEvent" onclick="addEvent()">
+                  Add
+                </button>
+              </div>
+              <div id="reminder-section">
+                <h3>Reminders</h3>
+                <!-- List to display reminders -->
+                <ul id="reminderList">
+                  <li data-event-id="1">
+                    <strong>Event Title</strong>
+                    - Event Description on Event Date
+                    <button class="delete-event" onclick="deleteEvent(1)">
+                      Delete
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div id="right">
+              <h3 id="monthAndYear"></h3>
+              <div class="button-container-calendar">
+                <button id="previous" onclick="previous()">
+                  < </button>
+                    <button id="next" onclick="next()"> > </button>
+              </div>
+              <table class="table-calendar" id="calendar" data-lang="en">
+                <thead id="thead-month"></thead>
+                <!-- Table body for displaying the calendar -->
+                <tbody id="calendar-body"></tbody>
+              </table>
+              <div class="footer-container-calendar">
+                <label for="month">Jump To: </label>
+                <!-- Dropdowns to select a specific month and year -->
+                <select id="month" onchange="jump()">
+                  <option value=0>Jan</option>
+                  <option value=1>Feb</option>
+                  <option value=2>Mar</option>
+                  <option value=3>Apr</option>
+                  <option value=4>May</option>
+                  <option value=5>Jun</option>
+                  <option value=6>Jul</option>
+                  <option value=7>Aug</option>
+                  <option value=8>Sep</option>
+                  <option value=9>Oct</option>
+                  <option value=10>Nov</option>
+                  <option value=11>Dec</option>
+                </select>
+                <!-- Dropdown to select a specific year -->
+                <select id="year" onchange="jump()"></select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </div>
+  <script src="/faculty/dashboard/CalenderScript.js"></script>
+</body>
+
+</html>
