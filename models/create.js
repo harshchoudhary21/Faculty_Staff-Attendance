@@ -103,14 +103,14 @@ function createDatabaseAndTables() {
     )
   `;
 
-executeQuery(
+  executeQuery(
     createStaffAttendanceTableQuery,
     "Staff attendance table created successfully",
     "Error creating Staff attendance table"
-);
+  );
 
-// Define the SQL statement to create the faculty on leave table
-const createFacultyOnLeaveTableQuery = `
+  // Define the SQL statement to create the faculty on leave table
+  const createFacultyOnLeaveTableQuery = `
     CREATE TABLE IF NOT EXISTS faculty_on_leave (
       faculty_id INT,
       from_date DATE,
@@ -122,14 +122,14 @@ const createFacultyOnLeaveTableQuery = `
     )
   `;
 
-executeQuery(
+  executeQuery(
     createFacultyOnLeaveTableQuery,
     "Faculty on leave table created successfully",
     "Error creating Faculty on leave table"
-);
+  );
 
-// Define the SQL statement to create the staff on leave table
-const createStaffOnLeaveTableQuery = `
+  // Define the SQL statement to create the staff on leave table
+  const createStaffOnLeaveTableQuery = `
     CREATE TABLE IF NOT EXISTS staff_on_leave (
       staff_id INT,
       from_date DATE,
@@ -141,25 +141,25 @@ const createStaffOnLeaveTableQuery = `
     )
   `;
 
-executeQuery(
+  executeQuery(
     createStaffOnLeaveTableQuery,
     "Staff on leave table created successfully",
     "Error creating Staff on leave table"
-);
+  );
 
-const createCoursesTableQuery = `
+  const createCoursesTableQuery = `
 CREATE TABLE IF NOT EXISTS courses (
   course_id INT PRIMARY KEY,
   course_name VARCHAR(255) NOT NULL,
   Department VARCHAR(255) NOT NULL
 )
 `;
-executeQuery(
-  createCoursesTableQuery,
-  "Courses table created successfully",
-  "Error creating Courses table"
-);
-const createTeachesTableQuery = `
+  executeQuery(
+    createCoursesTableQuery,
+    "Courses table created successfully",
+    "Error creating Courses table"
+  );
+  const createTeachesTableQuery = `
 CREATE TABLE IF NOT EXISTS teaches (
   fid INT,
   course_id INT,
@@ -168,14 +168,11 @@ CREATE TABLE IF NOT EXISTS teaches (
   FOREIGN KEY (course_id) REFERENCES courses(course_id)
   )
   `;
-executeQuery(
-  createTeachesTableQuery,
-  "Teaches table created successfully",
-  "Error creating Teaches table"
-);
-
-
-
+  executeQuery(
+    createTeachesTableQuery,
+    "Teaches table created successfully",
+    "Error creating Teaches table"
+  );
 
   // Close the connection
   connection.end((err) => {

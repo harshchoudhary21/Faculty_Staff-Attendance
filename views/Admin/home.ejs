@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+
+      .card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin: 10px;
+        text-align: center;
+      }
+
+      h1 {
+        margin-top: 0;
+        color: #333;
+      }
+
+      a {
+        display: block;
+        margin-bottom: 10px;
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      a:hover {
+        color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Staff</h1>
+      <a href="/admin/staff/view">View</a>
+      <a href="/admin/staff/attendance">Attendance</a>
+    </div>
+    <div class="card">
+      <h1>Faculty</h1>
+      <a href="/admin/faculty/view">View</a>
+      <a href="/admin/faculty/attendance">Attendance</a>
+    </div>
+    <div class="card">
+      <h1>Leave</h1>
+      <a href="/admin/staff/leave">Staff leave</a>
+      <a href="/admin/faculty/leave">Faculty leave</a>
+    </div>
+  </body>
+</html>

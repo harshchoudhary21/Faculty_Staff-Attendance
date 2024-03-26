@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Attendance</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .date {
+      color: #ff6600;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Staff Attendance</h1>
+  <p class="date"><%= new Date().toDateString() %></p>
+  <form action="/admin/staff/attendance" method="POST">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Attendance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% staffs.forEach(staff => { %>
+          <tr>
+            <td><%= staff.name %></td>
+            <td>
+              <label>
+                <input type="checkbox" name="attendance[<%= staff.sid %>]" value="present">
+                Present
+              </label>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <button type="submit">Submit Attendance</button>
+  </form>
+</body>
+</html>

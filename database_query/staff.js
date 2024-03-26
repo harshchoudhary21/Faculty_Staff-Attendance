@@ -95,10 +95,32 @@ async function deleteStaffByInsertId(insertId){
         });
     });
 }
+
+async function getAllStaff(){
+    const query = `SELECT * FROM staff`;
+    try{
+        const results = await new Promise((resolve,reject)=>{
+            connection.query(query,[],(error,results)=>{
+                if(error){
+                    reject(error);
+                }else{
+                    resolve(results);
+                }
+            });
+        });
+        return results;
+    }
+    catch(error){
+        throw error;
+    }
+}
+
+
  module.exports = {
     insertStaff,
     getStaffByInsertId,
     getStaffByEmailAndPassword,
     updateStaffByInsertId,
-    deleteStaffByInsertId
+    deleteStaffByInsertId,
+    getAllStaff
 };

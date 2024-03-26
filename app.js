@@ -14,7 +14,7 @@ app.use(express.static("public"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: true }));
 const { insertFaculty, getFacultyByEmailAndPassword, getFacultyByInsertId, updateFaculty, deleteFaculty,getFacultyCourses } = require("./database_query/faculty");
-const { insertStaff, getStaffByEmailAndPassword, getStaffByInsertId } = require("./database_query/staff");
+const { insertStaff, getStaffByEmailAndPassword, getStaffByInsertId, getAllStaff } = require("./database_query/staff");
 
 
 app.use(session({
@@ -200,6 +200,39 @@ app.get('/logout', (req, res) => {
 app.get("/notice", (req, res) => {
     res.render("faculty/notice/notification");
 });
+
+// -------- Admin --------//
+app.get("/admin", (req, res) => {
+    res.render("Admin/login")
+})
+
+app.post("/admin", (req, res) => {
+    const {email, password} = req.body;
+    if(email === 'admin@iiitg.ac.in' && password === 'admin@123') {
+        res.redirect('/admin/dashboard');
+    } else {
+        res.redirect('admin');
+    }
+})
+
+app.get('/admin/dashboard',(req, res) => {
+    res.render('Admin/home');
+})
+
+app.get('/admin/staff/view', async (req, res) => {
+    const staffs = await getAllStaff();
+    res.render('Admin/staff/index',{staffs: staffs});
+})
+
+app.get("/admin/staff/attendance",async (req, res) => {
+    const staffs = await getAllStaff();
+    res.render('Admin/staff/attendance',{staffs: staffs});
+})
+
+app.post("/admin/staff/attendance",async (req, res) => {
+    const attendanceData = req.body.attendance;
+    
+})
 
 const PORT = 4000;
 app.listen(PORT, () => {
