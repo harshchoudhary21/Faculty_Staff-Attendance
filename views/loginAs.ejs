@@ -1,87 +1,163 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>Attendance Management System</title>
-  <link rel="stylesheet" href="/assets/css/loginAs.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/styles.min.css">
-
-</head>
-<body>
-  <nav class="navbar navbar-expand-md bg-dark py-3" data-bs-theme="dark">
-    <div class="container"><a class="navbar-brand d-flex align-items-center" href="#"><span class="bs-icon-sm bs-icon-rounded bs-icon-primary d-flex justify-content-center align-items-center me-2 bs-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-bezier">
-            <path fill-rule="evenodd" d="M0 10.5A1.5 1.5 0 0 1 1.5 9h1A1.5 1.5 0 0 1 4 10.5v1A1.5 1.5 0 0 1 2.5 13h-1A1.5 1.5 0 0 1 0 11.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm10.5.5A1.5 1.5 0 0 1 13.5 9h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM6 4.5A1.5 1.5 0 0 1 7.5 3h1A1.5 1.5 0 0 1 10 4.5v1A1.5 1.5 0 0 1 8.5 7h-1A1.5 1.5 0 0 1 6 5.5zM7.5 4a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"></path>
-            <path d="M6 4.5H1.866a1 1 0 1 0 0 1h2.668A6.517 6.517 0 0 0 1.814 9H2.5c.123 0 .244.015.358.043a5.517 5.517 0 0 1 3.185-3.185A1.503 1.503 0 0 1 6 5.5zm3.957 1.358A1.5 1.5 0 0 0 10 5.5v-1h4.134a1 1 0 1 1 0 1h-2.668a6.517 6.517 0 0 1 2.72 3.5H13.5c-.123 0-.243.015-.358.043a5.517 5.517 0 0 0-3.185-3.185z"></path>
-          </svg></span><span>Attendance Management System</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-5"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-      <div class="collapse navbar-collapse" id="navcol-5">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link active" href="#">First Item</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Second Item</a></li>
-          <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
-        </ul><a class="btn btn-primary ms-md-2" role="Register" href="/register">Register</a>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Attendance Management System</title>
+    <link rel="stylesheet" href="/assets/css/loginAs.css" />
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/styles.min.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md bg-dark py-3" data-bs-theme="dark">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#"
+          ><span
+            class="bs-icon-sm bs-icon-rounded bs-icon-primary d-flex justify-content-center align-items-center me-2 bs-icon"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1em"
+              height="1em"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+              class="bi bi-bezier"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M0 10.5A1.5 1.5 0 0 1 1.5 9h1A1.5 1.5 0 0 1 4 10.5v1A1.5 1.5 0 0 1 2.5 13h-1A1.5 1.5 0 0 1 0 11.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm10.5.5A1.5 1.5 0 0 1 13.5 9h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM6 4.5A1.5 1.5 0 0 1 7.5 3h1A1.5 1.5 0 0 1 10 4.5v1A1.5 1.5 0 0 1 8.5 7h-1A1.5 1.5 0 0 1 6 5.5zM7.5 4a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"
+              ></path>
+              <path
+                d="M6 4.5H1.866a1 1 0 1 0 0 1h2.668A6.517 6.517 0 0 0 1.814 9H2.5c.123 0 .244.015.358.043a5.517 5.517 0 0 1 3.185-3.185A1.503 1.503 0 0 1 6 5.5zm3.957 1.358A1.5 1.5 0 0 0 10 5.5v-1h4.134a1 1 0 1 1 0 1h-2.668a6.517 6.517 0 0 1 2.72 3.5H13.5c-.123 0-.243.015-.358.043a5.517 5.517 0 0 0-3.185-3.185z"
+              ></path></svg></span
+          ><span>Attendance Management System</span></a
+        ><button
+          data-bs-toggle="collapse"
+          class="navbar-toggler"
+          data-bs-target="#navcol-5"
+        >
+          <span class="visually-hidden">Toggle navigation</span
+          ><span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navcol-5">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">First Item</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Second Item</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin">Admin</a>
+            </li>
+          </ul>
+          <a class="btn btn-primary ms-md-2" role="Register" href="/register"
+            >Register</a
+          >
+        </div>
       </div>
-    </div>
-  </nav>
-<!-- partial:index.partial.html -->
-<section class="user">
-  <div class="user_options-container">
-    <div class="user_options-text">
-      <div class="user_options-unregistered">
-        <h2 class="user_unregistered-title">Are You A Faculty?</h2>
-        <!-- <p class="user_unregistered-text">Faculty Login</p> -->
-        <button class="user_unregistered-signup" id="signup-button">Faculty Login</button>
-      </div>
-
-      <div class="user_options-registered">
-        <h2 class="user_registered-title">Are You A Staff?</h2>
-        <!-- <p class="user_registered-text">Student Login</p> -->
-        <button class="user_registered-login" id="login-button">Staff Login</button>
-      </div>
-    </div>
-    
-    <div class="user_options-forms" id="user_options-forms">
-      <div class="user_forms-login">
-        <h2 class="forms_title">Staff Login</h2>
-        <form class="forms_form" action="/StaffLogin" method="post">
-          <fieldset class="forms_fieldset">
-            <div class="forms_field">
-              <input type="email" name="email" placeholder="Email" class="forms_field-input" required autofocus />
-            </div>
-            <div class="forms_field">
-              <input type="password" name="password" placeholder="Password" class="forms_field-input" required />
-            </div>
-          </fieldset>
-          <div class="forms_buttons">
-            <p class="forms_buttons-forgot"><a href="assets/custom/404.html" class="text-link">Forgot your password?</a></p>
-            <input type="submit" value="Log In" class="forms_buttons-action">
+    </nav>
+    <!-- partial:index.partial.html -->
+    <section class="user">
+      <div class="user_options-container">
+        <div class="user_options-text">
+          <div class="user_options-unregistered">
+            <h2 class="user_unregistered-title">Are You A Faculty?</h2>
+            <!-- <p class="user_unregistered-text">Faculty Login</p> -->
+            <button class="user_unregistered-signup" id="signup-button">
+              Faculty Login
+            </button>
           </div>
-        </form>
-      </div>
-      <div class="user_forms-signup">
-        <h2 class="forms_title">Faculty Login</h2>
-        <form class="forms_form" action="/FacultyLogin" method="post">
-          <fieldset class="forms_fieldset">
-            <div class="forms_field">
-              <input type="email" name="email" placeholder="Email" class="forms_field-input" required autofocus />
-            </div>
-            <div class="forms_field">
-              <input type="password" name="password" placeholder="Password" class="forms_field-input" required />
-            </div>
-          </fieldset>
-          <div class="forms_buttons">
-            <p class="forms_buttons-forgot"><a href="assets/custom/404.html" class="text-link">Forgot your password?</a></p>
-            <input type="submit" value="Log In" class="forms_buttons-action">
+
+          <div class="user_options-registered">
+            <h2 class="user_registered-title">Are You A Staff?</h2>
+            <!-- <p class="user_registered-text">Student Login</p> -->
+            <button class="user_registered-login" id="login-button">
+              Staff Login
+            </button>
           </div>
-        </form>
+        </div>
+
+        <div class="user_options-forms" id="user_options-forms">
+          <div class="user_forms-login">
+            <h2 class="forms_title">Staff Login</h2>
+            <form class="forms_form" action="/StaffLogin" method="post">
+              <fieldset class="forms_fieldset">
+                <div class="forms_field">
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    class="forms_field-input"
+                    required
+                    autofocus
+                  />
+                </div>
+                <div class="forms_field">
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    class="forms_field-input"
+                    required
+                  />
+                </div>
+              </fieldset>
+              <div class="forms_buttons">
+                <p class="forms_buttons-forgot">
+                  <a href="assets/custom/404.html" class="text-link"
+                    >Forgot your password?</a
+                  >
+                </p>
+                <input
+                  type="submit"
+                  value="Log In"
+                  class="forms_buttons-action"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="user_forms-signup">
+            <h2 class="forms_title">Faculty Login</h2>
+            <form class="forms_form" action="/FacultyLogin" method="post">
+              <fieldset class="forms_fieldset">
+                <div class="forms_field">
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    class="forms_field-input"
+                    required
+                    autofocus
+                  />
+                </div>
+                <div class="forms_field">
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    class="forms_field-input"
+                    required
+                  />
+                </div>
+              </fieldset>
+              <div class="forms_buttons">
+                <p class="forms_buttons-forgot">
+                  <a href="assets/custom/404.html" class="text-link"
+                    >Forgot your password?</a
+                  >
+                </p>
+                <input
+                  type="submit"
+                  value="Log In"
+                  class="forms_buttons-action"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-
-<!-- partial -->
-  <script  src="/assets/js/loginAs.js"></script>
-
-</body>
+    <!-- partial -->
+    <script src="/assets/js/loginAs.js"></script>
+  </body>
 </html>
