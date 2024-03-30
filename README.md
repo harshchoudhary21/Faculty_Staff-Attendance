@@ -1,6 +1,6 @@
 # Staff and Faculty Management System
 
-The Staff and Faculty Management System is a comprehensive web application designed to streamline the management of staff and faculty members within educational institutions or organizations. This system provides a user-friendly interface for administrators to handle various tasks such as maintaining employee records, tracking attendance, managing leave requests, and more.
+The Staff and Faculty Management System is a comprehensive web application designed to streamline the management of staff and faculty members within educational institutions or organizations. This system provides a user-friendly interface for administrators to handle various tasks such as maintaining faculty/staff records, tracking attendance, managing leave requests, and more.
 
 ## Features
 
