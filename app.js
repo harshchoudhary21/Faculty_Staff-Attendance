@@ -16,9 +16,13 @@ const {
   insertFaculty,
   getFacultyByEmailAndPassword,
   getFacultyByInsertId,
-  updateFaculty,
-  deleteFaculty,
+  updateFacultyByInsertId, // Corrected function name
+  deleteFacultyByInsertId, // Corrected function name
+  getFacultyStatus,
+  markFacultiesAttendance,
+  getAllFaculty,
   getFacultyCourses,
+  
 } = require("./database_query/faculty");
 const {
   insertStaff,
@@ -276,18 +280,18 @@ app.get("/admin/dashboard", (req, res) => {
   res.render("Admin/home");
 });
 
+// Staff routes
 app.get("/admin/staff/view", async (req, res) => {
   const staffs = await getAllStaff();
-  res.render("Admin/staff/index", { staffs: staffs });
+  res.render("Admin/staff/index", { staffs });
 });
 
-app.get("/amdin/staff/:staffId/edit", async (req, res) => {
+app.get("/admin/staff/:staffId/edit", async (req, res) => {
   const staff = await getStaffByInsertId(req.params.staffId);
-  // res.send(staff)
-  res.render("Admin/staff/edit", { staff: staff });
+  res.render("Admin/staff/edit", { staff });
 });
 
-app.post("/amdin/staff/:staffId/edit", async (req, res) => {
+app.post("/admin/staff/:staffId/edit", async (req, res) => {
   const { name, email, password, phone_number, designation } = req.body;
   await updateStaffByInsertId(
     req.params.staffId,
@@ -300,14 +304,11 @@ app.post("/amdin/staff/:staffId/edit", async (req, res) => {
   res.redirect("/admin/staff/view");
 });
 
-app.get("/amdin/staff/:staffId/profile", async (req, res) => {
+app.get("/admin/staff/:staffId/profile", async (req, res) => {
   try {
     const staff = await getStaffByInsertId(req.params.staffId);
     const staffStatus = await getStaffStatus(req.params.staffId);
-    res.render("Admin/staff/profile", {
-      staff: staff,
-      staffStatus: staffStatus
-    });
+    res.render("Admin/staff/profile", { staff, staffStatus });
   } catch (error) {
     console.error("Error fetching staff profile:", error);
     res.status(500).send("Internal Server Error");
@@ -321,12 +322,11 @@ app.post("/admin/staff/:staffId/delete", async (req, res) => {
 
 app.get("/admin/staff/attendance", async (req, res) => {
   const staffs = await getAllStaff();
-  res.render("Admin/staff/attendance", { staffs: staffs });
+  res.render("Admin/staff/attendance", { staffs });
 });
 
 app.post("/admin/staff/attendance", async (req, res) => {
-  const { attendance_present, attendance_absent, attendance_onleave } =
-    req.body;
+  const { attendance_present, attendance_absent, attendance_onleave } = req.body;
   await markStaffsAttendance(
     attendance_present,
     attendance_absent,
@@ -335,6 +335,60 @@ app.post("/admin/staff/attendance", async (req, res) => {
   res.redirect("/admin/staff/attendance");
 });
 
+// Faculty routes
+app.get("/admin/faculty/view", async (req, res) => {
+  const faculties = await getAllFaculty();
+  res.render("Admin/faculty/index", { faculties });
+});
+
+app.get("/admin/faculty/:facultyId/edit", async (req, res) => {
+  const faculty = await getFacultyByInsertId(req.params.facultyId);
+  res.render("Admin/faculty/edit", { faculty });
+});
+
+app.post("/admin/faculty/:facultyId/edit", async (req, res) => {
+  const { name, email, password, phone_number, department } = req.body;
+  await updateFacultyByInsertId(
+    req.params.facultyId,
+    name,
+    email,
+    password,
+    department,
+    phone_number
+  );
+  res.redirect("/admin/faculty/view");
+});
+
+app.get("/admin/faculty/:facultyId/profile", async (req, res) => {
+  try {
+    const faculty = await getFacultyByInsertId(req.params.facultyId);
+    const facultyStatus = await getFacultyStatus(req.params.facultyId);
+    res.render("Admin/faculty/profile", { faculty, facultyStatus });
+  } catch (error) {
+    console.error("Error fetching faculty profile:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.post("/admin/faculty/:facultyId/delete", async (req, res) => {
+  await deleteFacultyByInsertId(req.params.facultyId);
+  res.redirect("/admin/faculty/view");
+});
+
+app.get("/admin/faculty/attendance", async (req, res) => {
+  const faculties = await getAllFaculty();
+  res.render("Admin/faculty/attendance", { faculties });
+});
+
+app.post("/admin/faculty/attendance", async (req, res) => {
+  const { attendance_present, attendance_absent, attendance_onleave } = req.body;
+  await markFacultiesAttendance(
+    attendance_present,
+    attendance_absent,
+    attendance_onleave
+  );
+  res.redirect("/admin/faculty/attendance");
+});
 const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`Server is running on port http://localhost:${PORT}`);

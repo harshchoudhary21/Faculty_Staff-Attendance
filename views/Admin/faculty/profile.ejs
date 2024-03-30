@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #35ec7b;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #8a973c;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .profile-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .profile-card:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 128, 0, 0.2);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+        .profile-card:hover:before {
+            left: 0;
+        }
+        .profile-card label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        .profile-card p {
+            margin: 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+        }
+        .profile-card p span {
+            font-weight: normal;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Faculty Profile</h1>
+        <div class="profile-info">
+            <div class="profile-card">
+                <label for="name">Name:</label>
+                <p><span><%= faculty.name %></span></p>
+            </div>
+            <div class="profile-card">
+                <label for="email">Email:</label>
+                <p><span><%= faculty.email %></span></p>
+            </div>
+            <div class="profile-card">
+                <label for="phone">Phone Number:</label>
+                <p><span><%= faculty.phone_number %></span></p>
+            </div>
+            <div class="profile-card">
+                <label for="department">Department:</label>
+                <p><span><%= faculty.department %></span></p>
+            </div>
+            <div class="profile-card">
+                <label for="totalDays">Total Working Days:</label>
+                <p><span><%= facultyStatus.totalDays %></span></p>
+            </div>
+            <div class="profile-card">
+                <label for="presentDays">Present Days:</label>
+                <p><span><%= facultyStatus.presentDays %></span></p>
+            </div>
+            <div class="profile-card">
+                <label for="absentDays">Absent Days:</label>
+                <p><span><%= facultyStatus.absentDays %></span></p>
+            </div>
+            <div class="profile-card">
+                <label for="onLeaveDays">Days on Leave:</label>
+                <p><span><%= facultyStatus.onLeaveDays %></span></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

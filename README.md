@@ -14,7 +14,7 @@ The Staff and Faculty Management System is a comprehensive web application desig
 
 - **Front-end**: HTML5, CSS3, JavaScript
 - **Server-side**: Node.js, Express.js
-- **Database**: MongoDB (or any other appropriate database)
+- **Database**:MySQL
 - **Authentication**: JSON Web Tokens (JWT)
 - **Templating Engine**: EJS (Embedded JavaScript)
 
@@ -24,11 +24,9 @@ The Staff and Faculty Management System is a comprehensive web application desig
 2. Install dependencies: `npm install`
 3. Set up the database and configure the environment variables.
 4. Start the server: `npm start`
-5. Open the application in your web browser at `http://localhost:3000`
+5. Open the application in your web browser at `http://localhost:4000`
 
-## Usage
 
-Detailed usage instructions and documentation can be found in the [Wiki](link-to-wiki) section of this repository.
 
 ## Contributing
 
