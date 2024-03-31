@@ -22,7 +22,6 @@ const {
   markFacultiesAttendance,
   getAllFaculty,
   getFacultyCourses,
-  
 } = require("./database_query/faculty");
 const {
   insertStaff,
@@ -33,6 +32,10 @@ const {
   deleteStaffByInsertId,
   markStaffsAttendance,
   getStaffStatus,
+  insertStaffLeave,
+  getAllStaffLeave,
+  actionStaffLeave,
+  getAllStaffOnLeave
 } = require("./database_query/staff");
 
 app.use(
@@ -40,8 +43,12 @@ app.use(
     secret: "your_secret_key",
     resave: false,
     saveUninitialized: true,
+    cookie: {
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+    },
   })
 );
+
 app.get("/", (req, res) => {
   res.render("loginAs");
 });
@@ -258,9 +265,18 @@ app.get("/logout", (req, res) => {
   });
 });
 
-app.get("/notice", (req, res) => {
-  res.render("faculty/notice/notification");
+app.get("/staffdashboard/:staffId/applyLeave", async (req, res) => {
+  const staff = await getStaffByInsertId(req.params.staffId);
+  res.render("Staff/dashboard/applyLeave", { staff });
 });
+
+app.post("/staffdashboard/:staffId/applyLeave", async (req, res) => {
+  const { name, from_date, to_date, reason } = req.body;
+  const staff_id = req.params.staffId; 
+  await insertStaffLeave({ staffId: staff_id, fromDate: from_date, toDate: to_date, reason: reason }); // Make sure to pass the correct object properties
+  res.redirect(`/staffdashboard/${staff_id}`);
+});
+
 
 // -------- Admin --------//
 app.get("/admin", (req, res) => {
@@ -322,7 +338,8 @@ app.post("/admin/staff/:staffId/delete", async (req, res) => {
 
 app.get("/admin/staff/attendance", async (req, res) => {
   const staffs = await getAllStaff();
-  res.render("Admin/staff/attendance", { staffs });
+  const staffsOnLeave = await getAllStaffOnLeave();
+  res.render("Admin/staff/attendance", { staffs, staffsOnLeave });
 });
 
 app.post("/admin/staff/attendance", async (req, res) => {
@@ -334,6 +351,60 @@ app.post("/admin/staff/attendance", async (req, res) => {
   );
   res.redirect("/admin/staff/attendance");
 });
+
+app.get("/admin/staff/leave", async (req, res) => {
+  const leaveRequests = await getAllStaffLeave();
+  res.render("Admin/leave/staff_leave", {leaveRequests: leaveRequests});
+})
+
+app.post("/admin/acceptLeave", async (req, res) => {
+  const { leaveId, from_date, to_date } = req.body;
+  
+  // Convert date strings to DATE format
+  const formatDateToISO = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const formattedFromDate = formatDateToISO(from_date);
+  const formattedToDate = formatDateToISO(to_date);
+ 
+  try {
+    await actionStaffLeave(leaveId, formattedFromDate, formattedToDate, 'approved');
+    res.redirect('/admin/staff/leave');
+  } catch (error) {
+    console.error("Error accepting leave:", error);
+    res.status(500).send("Error accepting leave");
+  }
+});
+
+app.post("/admin/rejectLeave", async (req, res) => {
+  const { leaveId, from_date, to_date } = req.body;
+  
+  // Convert date strings to DATE format
+  const formatDateToISO = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const formattedFromDate = formatDateToISO(from_date);
+  const formattedToDate = formatDateToISO(to_date);
+ 
+  try {
+    await actionStaffLeave(leaveId, formattedFromDate, formattedToDate, 'rejected');
+    res.redirect('/admin/staff/leave');
+  } catch (error) {
+    console.error("Error accepting leave:", error);
+    res.status(500).send("Error accepting leave");
+  }
+});
+
 
 // Faculty routes
 app.get("/admin/faculty/view", async (req, res) => {
@@ -381,7 +452,8 @@ app.get("/admin/faculty/attendance", async (req, res) => {
 });
 
 app.post("/admin/faculty/attendance", async (req, res) => {
-  const { attendance_present, attendance_absent, attendance_onleave } = req.body;
+  const { attendance_present, attendance_absent, attendance_onleave } =
+    req.body;
   await markFacultiesAttendance(
     attendance_present,
     attendance_absent,

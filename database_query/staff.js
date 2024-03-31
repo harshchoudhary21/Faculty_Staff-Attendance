@@ -245,6 +245,92 @@ function getStaffStatus(staffId) {
   });
 }
 
+async function insertStaffLeave(leaveData) {
+  const { staffId, fromDate, toDate, reason } = leaveData;
+  const status = 'pending'; // Assuming leave requests are initially set as pending
+  
+  const query = `INSERT INTO staff_on_leave (staff_id, from_date, to_date, reason, status) VALUES (?, ?, ?, ?, ?)`;
+  const values = [staffId, fromDate, toDate, reason, status];
+
+  return new Promise((resolve, reject) => {
+    connection.query(query, values, (err, results) => {
+      if (err) {
+        console.error("Error inserting staff leave: ", err);
+        reject(err);
+        return;
+      }
+      console.log('Staff leave request inserted successfully');
+      resolve(results);
+    });
+  });
+}
+
+async function getAllStaffLeave() {
+  const query = `SELECT name, from_date, to_date, reason, status, staff_id
+  FROM staff_on_leave AS sl LEFT JOIN staff as s   
+  on s.sid = sl.staff_id`;
+  try {
+    const results = await new Promise((resolve, reject) => {
+      connection.query(query, [], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+    return results;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function actionStaffLeave(staffId, fromDate, toDate, status) {
+  // Define the query to update the status of the leave request
+  const query = `UPDATE staff_on_leave SET status = ? WHERE staff_id = ? AND from_date = ? AND to_date = ?`;
+  const values = [status, staffId, fromDate, toDate];
+
+  try {
+    // Execute the query
+    const result = await new Promise((resolve, reject) => {
+      connection.query(query, values, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          console.log(arguments);
+          resolve(results);
+        }
+      });
+    });
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getAllStaffOnLeave() {
+  const query = `SELECT sl.staff_id, s.name, sl.from_date, sl.to_date, sl.reason, sl.status
+                 FROM staff_on_leave AS sl
+                 INNER JOIN staff AS s ON sl.staff_id = s.sid
+                 WHERE sl.status = 'approved'`;
+  try {
+    const results = await new Promise((resolve, reject) => {
+      connection.query(query, [], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+    return results;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
 module.exports = {
   insertStaff,
   getStaffByInsertId,
@@ -254,4 +340,9 @@ module.exports = {
   getAllStaff,
   markStaffsAttendance,
   getStaffStatus,
+  insertStaffLeave,
+  getAllStaffLeave,
+  actionStaffLeave,
+  getAllStaffOnLeave
 };
+
