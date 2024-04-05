@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Staff Leave Requests</title>
+  <title>Faculty Leave Requests</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
@@ -78,7 +78,7 @@
   </style>
 </head>
 <body>
-  <h2>Staff Leave Requests</h2>
+  <h2>Faculty Leave Requests</h2>
   <table>
     <thead>
       <tr>
@@ -96,11 +96,11 @@
           <td><%= request.name %></td>
           <td><%= formatDate(request.from_date) %></td>
           <td><%= formatDate(request.to_date) %></td>
-          <td><%= request.reason %></td>
+          <td><%= request.Description %></td>
           <td><%= request.status %></td>
           <td class="action-buttons">
             <form method="POST" action="/admin/acceptLeave">
-              <input type="hidden" name="leaveId" value="<%= request.staff_id %>">
+              <input type="hidden" name="leaveId" value="<%= request.faculty_id %>">
               <input type="hidden" name="from_date" value="<%= request.from_date %>">
               <input type="hidden" name="to_date" value="<%= request.to_date %>">
               <% if (request.status === 'pending') { %>
@@ -108,7 +108,7 @@
               <% } %>
             </form>
             <form method="POST" action="/admin/rejectLeave">
-                <input type="hidden" name="leaveId" value="<%= request.staff_id %>">
+                <input type="hidden" name="leaveId" value="<%= request.faculty_id %>">
                 <input type="hidden" name="from_date" value="<%= request.from_date %>">
                 <input type="hidden" name="to_date" value="<%= request.to_date %>">
                 <% if (request.status === 'pending') { %>

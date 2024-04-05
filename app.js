@@ -14,14 +14,18 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: true }));
 const {
   insertFaculty,
-  getFacultyByEmailAndPassword,
   getFacultyByInsertId,
-  updateFacultyByInsertId, // Corrected function name
-  deleteFacultyByInsertId, // Corrected function name
-  getFacultyStatus,
-  markFacultiesAttendance,
+  getFacultyByEmailAndPassword,
+  updateFacultyByInsertId,
+  deleteFacultyByInsertId,
   getAllFaculty,
+  markFacultiesAttendance,
+  getFacultyStatus,
   getFacultyCourses,
+  insertFacultyLeave,
+  getAllFacultyLeave,
+  actionFacultyLeave,
+  getAllFacultyOnLeave
 } = require("./database_query/faculty");
 const {
   insertStaff,
@@ -256,6 +260,19 @@ app.get(
     }
   }
 );
+app.post("/facultydashboard/:facultyId/applyLeave", async (req, res) => {
+  const { name, from_date, to_date, reason } = req.body;
+  const faculty_id = req.params.facultyId; 
+  await insertFacultyLeave({ facultyId: faculty_id, fromDate: from_date, toDate: to_date, reason: reason }); // Make sure to pass the correct object properties
+  res.redirect(`/facultydashboard/${faculty_id}`);
+
+});
+
+app.get("/facultydashboard/:facultyId/applyLeave", async (req, res) => {
+  const faculty = await getFacultyByInsertId(req.params.facultyId);
+  res.render("Faculty/dashboard/applyLeave", { faculty });
+});
+
 app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -448,9 +465,9 @@ app.post("/admin/faculty/:facultyId/delete", async (req, res) => {
 
 app.get("/admin/faculty/attendance", async (req, res) => {
   const faculties = await getAllFaculty();
-  res.render("Admin/faculty/attendance", { faculties });
+  const facultiesOnLeave = await getAllFacultyOnLeave();
+  res.render("Admin/faculty/attendance", { faculties, facultiesOnLeave });
 });
-
 app.post("/admin/faculty/attendance", async (req, res) => {
   const { attendance_present, attendance_absent, attendance_onleave } =
     req.body;
@@ -460,6 +477,58 @@ app.post("/admin/faculty/attendance", async (req, res) => {
     attendance_onleave
   );
   res.redirect("/admin/faculty/attendance");
+});
+app.get("/admin/faculty/leave", async (req, res) => {
+  const leaveRequests = await getAllFacultyLeave();
+  res.render("Admin/leave/faculty_leave", {leaveRequests: leaveRequests});
+})
+
+app.post("/admin/acceptFacultyLeave", async (req, res) => {
+  const { leaveId, from_date, to_date } = req.body;
+  
+  // Convert date strings to DATE format
+  const formatDateToISO = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const formattedFromDate = formatDateToISO(from_date);
+  const formattedToDate = formatDateToISO(to_date);
+ 
+  try {
+    await actionFacultyLeave(leaveId, formattedFromDate, formattedToDate, 'approved');
+    res.redirect('/admin/faculty/leave');
+  } catch (error) {
+    console.error("Error accepting leave:", error);
+    res.status(500).send("Error accepting leave");
+  }
+});
+
+app.post("/admin/rejectFacultyLeave", async (req, res) => {
+  const { leaveId, from_date, to_date } = req.body;
+  
+  // Convert date strings to DATE format
+  const formatDateToISO = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const formattedFromDate = formatDateToISO(from_date);
+  const formattedToDate = formatDateToISO(to_date);
+ 
+  try {
+    await actionFacultyLeave(leaveId, formattedFromDate, formattedToDate, 'rejected');
+    res.redirect('/admin/faculty/leave');
+  } catch (error) {
+    console.error("Error rejecting leave:", error);
+    res.status(500).send("Error rejecting leave");
+  }
 });
 const PORT = 4000;
 app.listen(PORT, () => {

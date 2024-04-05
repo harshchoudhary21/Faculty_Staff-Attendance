@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Leave</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8e3e3, #e3f8f8);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .leave-form {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.8s ease;
+        }
+
+        @keyframes slideUp {
+            0% {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .leave-form h2 {
+            margin-top: 0;
+            font-size: 28px;
+            color: #333;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .leave-form input[type="text"],
+        .leave-form input[type="date"],
+        .leave-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .leave-form input[type="text"]:focus,
+        .leave-form input[type="date"]:focus,
+        .leave-form textarea:focus {
+            outline: none;
+            border-color: #6c63ff;
+            box-shadow: 0 0 10px rgba(108, 99, 255, 0.3);
+        }
+
+        .leave-form input[type="submit"] {
+            background-color: #6c63ff;
+            color: #fff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-size: 16px;
+            margin-top: 20px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(108, 99, 255, 0.3);
+        }
+
+        .leave-form input[type="submit"]:hover {
+            background-color: #5a50e5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(108, 99, 255, 0.4);
+        }
+
+        .leave-form textarea {
+            resize: none;
+            height: 120px;
+        }
+
+        .leave-form label {
+            font-weight: 500;
+            color: #555;
+            display: block;
+            margin-top: 20px;
+        }
+
+        .leave-form input[type="text"]::placeholder,
+        .leave-form input[type="date"]::placeholder,
+        .leave-form textarea::placeholder {
+            color: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+    <form class="leave-form" action="/facultydashboard/<%= faculty.fid %>/applyLeave" method="post">
+        <h2>Apply Leave</h2>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+        <label for="date">Leave From:</label>
+        <input type="date" id="date" name="from_date" placeholder="YYYY-MM-DD" required>
+        <label for="date">To:</label>
+        <input type="date" id="date" name="to_date" placeholder="YYYY-MM-DD" required>
+        <label for="reason">Reason:</label>
+        <textarea id="reason" name="reason" placeholder="Enter your reason for leave" required></textarea>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+
+</html>

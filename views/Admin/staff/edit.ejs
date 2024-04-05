@@ -5,57 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Staff</title>
     <style>
-        /* General Styles */
-body {
-    font-family: Arial, sans-serif;
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+      body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #1A2226;
+    animation: backgroundAnimation 10s ease infinite;
     margin: 0;
     padding: 20px;
-  }
-  
-  h1 {
-    color: #333;
-  }
-  
-  /* Form Styles */
-  form {
-    max-width: 400px;
-    margin: 0 auto;
-    background-color: #f5f5f5;
+    color: #ECF0F5;
+}
+
+h1 {
+    text-align: center;
+    color: #0DB8DE;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease;
+}
+
+form {
+    max-width: 600px;
+    margin: 75px auto;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  label {
+    background-color: #11181B; /* Darker color */
+    border: 2px solid #0DB8DE;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Larger shadow for uplifted effect */
+}
+
+label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-  }
-  
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  
-  button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
+    color: #ECF0F5;
+    text-align: left;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    background-color: #1A2226;
     border: none;
-    border-radius: 4px;
+    border-bottom: 2px solid #0DB8DE;
+    border-radius: 0px;
+    font-weight: bold;
+    outline: 0;
+    margin-bottom: 20px;
+    padding: 10px;
+    color: #ECF0F5;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+button[type="submit"] {
+    border-color: #0DB8DE;
+    color: #0DB8DE;
+    border-radius: 0px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 20px;
     cursor: pointer;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #45a049;
-  }
-    </style>
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0DB8DE;
+    color: white;
+}
+  </style>
 </head>
 <body>
     <h1>Edit Staff Details</h1>

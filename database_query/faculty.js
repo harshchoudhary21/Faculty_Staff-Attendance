@@ -265,14 +265,76 @@ async function insertFaculty(name, email, password, department, phone_number) {
     }
 }
   
-  module.exports = {
-    insertFaculty,
-    getFacultyByInsertId,
-    getFacultyByEmailAndPassword,
-    updateFacultyByInsertId,
-    deleteFacultyByInsertId,
-    getAllFaculty,
-    markFacultiesAttendance,
-    getFacultyStatus,
-    getFacultyCourses
-  };
+ // Insert faculty leave
+async function insertFacultyLeave(fid, from_date, to_date, Description) {
+  const query = `INSERT INTO faculty_on_leave (faculty_id, from_date, to_date, Description) VALUES (?, ?, ?, ?)`;
+  const values = [fid, from_date, to_date, Description];
+  return new Promise((resolve, reject) => {
+    connection.query(query, values, (err, results) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(results);
+    });
+  });
+}
+
+// Get all faculty leave
+async function getAllFacultyLeave() {
+  const query = `SELECT * FROM faculty_on_leave`;
+  return new Promise((resolve, reject) => {
+    connection.query(query, [], (err, results) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(results);
+    });
+  });
+}
+
+// Action faculty leave
+async function actionFacultyLeave(fid, from_date, to_date, status) {
+  const query = `UPDATE faculty_on_leave SET status = ? WHERE faculty_id = ? AND from_date = ? AND to_date = ?`;
+  const values = [status, fid, from_date, to_date];
+  return new Promise((resolve, reject) => {
+    connection.query(query, values, (err, results) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(results);
+    });
+  });
+}
+
+// Get all faculty on leave
+async function getAllFacultyOnLeave() {
+  const query = `SELECT * FROM faculty_on_leave WHERE status = 'approved'`;
+  return new Promise((resolve, reject) => {
+    connection.query(query, [], (err, results) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(results);
+    });
+  });
+}
+
+module.exports = {
+  insertFaculty,
+  getFacultyByInsertId,
+  getFacultyByEmailAndPassword,
+  updateFacultyByInsertId,
+  deleteFacultyByInsertId,
+  getAllFaculty,
+  markFacultiesAttendance,
+  getFacultyStatus,
+  getFacultyCourses,
+  insertFacultyLeave,
+  getAllFacultyLeave,
+  actionFacultyLeave,
+  getAllFacultyOnLeave
+};
