@@ -381,10 +381,10 @@ app.post("/admin/staff/attendance", async (req, res) => {
   } else {
     // Set the flag to indicate that the form has been submitted
     req.session.formSubmitted = true;
-    
+
     const { attendance_present, attendance_absent, attendance_onleave } =
       req.body;
-      console.log(attendance_present, attendance_absent, attendance_onleave);
+    console.log(attendance_present, attendance_absent, attendance_onleave);
     await markStaffsAttendance(
       attendance_present,
       attendance_absent,
@@ -406,7 +406,7 @@ app.get("/admin/staff/edit_attendance", async (req, res) => {
 app.post("/admin/staff/edit_attendance", async (req, res) => {
   const { attendance_present, attendance_absent, attendance_onleave } =
     req.body;
-    console.log(attendance_present, attendance_absent, attendance_onleave);
+  console.log(attendance_present, attendance_absent, attendance_onleave);
   await updateStaffsAttendance(
     attendance_present,
     attendance_absent,
