@@ -247,8 +247,8 @@ function getStaffStatus(staffId) {
 
 async function insertStaffLeave(leaveData) {
   const { staffId, fromDate, toDate, reason } = leaveData;
-  const status = 'pending'; // Assuming leave requests are initially set as pending
-  
+  const status = "pending"; // Assuming leave requests are initially set as pending
+
   const query = `INSERT INTO staff_on_leave (staff_id, from_date, to_date, reason, status) VALUES (?, ?, ?, ?, ?)`;
   const values = [staffId, fromDate, toDate, reason, status];
 
@@ -259,7 +259,7 @@ async function insertStaffLeave(leaveData) {
         reject(err);
         return;
       }
-      console.log('Staff leave request inserted successfully');
+      console.log("Staff leave request inserted successfully");
       resolve(results);
     });
   });
@@ -309,11 +309,11 @@ async function actionStaffLeave(staffId, fromDate, toDate, status) {
   }
 }
 
-async function getAllStaffOnLeave() {
+async function getAllStaffOnLeave(date) {
   const query = `SELECT sl.staff_id, s.name, sl.from_date, sl.to_date, sl.reason, sl.status
                  FROM staff_on_leave AS sl
                  INNER JOIN staff AS s ON sl.staff_id = s.sid
-                 WHERE sl.status = 'approved'`;
+                 WHERE sl.status = 'approved' AND DATE('${date}') BETWEEN sl.from_date AND sl.to_date`;
   try {
     const results = await new Promise((resolve, reject) => {
       connection.query(query, [], (error, results) => {
@@ -330,6 +330,69 @@ async function getAllStaffOnLeave() {
   }
 }
 
+async function updateStaffAttendance(staffId, date, status) {
+  const query = `UPDATE staff_attendance SET status = ? WHERE sid = ? AND date = ?`;
+  const values = [status, staffId, date];
+  return new Promise((resolve, reject) => {
+    connection.query(query, values, (err, results) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(results);
+    });
+  });
+}
+
+async function updateStaffsAttendance(
+  presentStaffIds,
+  absentStaffIds,
+  onLeaveStaffIds
+) {
+  try {
+    // Get current date in YYYY-MM-DD format
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    let presentAttendancePromises = [];
+    let absentAttendancePromises = [];
+    let onLeaveAttendancePromises = [];
+
+    // Iterate over presentStaffIds and mark their attendance
+    if (presentStaffIds) {
+      presentAttendancePromises = presentStaffIds.map(async (staffId) => {
+        // Update the attendance record for the current date and mark staff as present
+        await updateStaffAttendance(staffId, currentDate, "present");
+      });
+    }
+
+    // Iterate over absentStaffIds and mark their attendance
+    if (absentStaffIds) {
+      absentAttendancePromises = absentStaffIds.map(async (staffId) => {
+        // Update the attendance record for the current date and mark staff as absent
+        await updateStaffAttendance(staffId, currentDate, "absent");
+      });
+    }
+
+    // Iterate over onLeaveStaffIds and mark their attendance
+    if (onLeaveStaffIds) {
+      onLeaveAttendancePromises = onLeaveStaffIds.map(async (staffId) => {
+        // Update the attendance record for the current date and mark staff as on leave
+        await updateStaffAttendance(staffId, currentDate, "on leave");
+      });
+    }
+
+    // Wait for all attendance records to be updated
+    await Promise.all([
+      ...presentAttendancePromises,
+      ...absentAttendancePromises,
+      ...onLeaveAttendancePromises,
+    ]);
+
+    console.log("Attendance updated for all staff members.");
+  } catch (error) {
+    console.error("Error updating attendance:", error);
+  }
+}
 
 module.exports = {
   insertStaff,
@@ -339,10 +402,10 @@ module.exports = {
   deleteStaffByInsertId,
   getAllStaff,
   markStaffsAttendance,
+  updateStaffsAttendance,
   getStaffStatus,
   insertStaffLeave,
   getAllStaffLeave,
   actionStaffLeave,
-  getAllStaffOnLeave
+  getAllStaffOnLeave,
 };
-

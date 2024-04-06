@@ -25,7 +25,7 @@ const {
   insertFacultyLeave,
   getAllFacultyLeave,
   actionFacultyLeave,
-  getAllFacultyOnLeave
+  getAllFacultyOnLeave,
 } = require("./database_query/faculty");
 const {
   insertStaff,
@@ -35,11 +35,12 @@ const {
   updateStaffByInsertId,
   deleteStaffByInsertId,
   markStaffsAttendance,
+  updateStaffsAttendance,
   getStaffStatus,
   insertStaffLeave,
   getAllStaffLeave,
   actionStaffLeave,
-  getAllStaffOnLeave
+  getAllStaffOnLeave,
 } = require("./database_query/staff");
 
 app.use(
@@ -260,12 +261,17 @@ app.get(
     }
   }
 );
+
 app.post("/facultydashboard/:facultyId/applyLeave", async (req, res) => {
   const { name, from_date, to_date, reason } = req.body;
-  const faculty_id = req.params.facultyId; 
-  await insertFacultyLeave({ facultyId: faculty_id, fromDate: from_date, toDate: to_date, reason: reason }); // Make sure to pass the correct object properties
+  const faculty_id = req.params.facultyId;
+  await insertFacultyLeave({
+    facultyId: faculty_id,
+    fromDate: from_date,
+    toDate: to_date,
+    reason: reason,
+  }); // Make sure to pass the correct object properties
   res.redirect(`/facultydashboard/${faculty_id}`);
-
 });
 
 app.get("/facultydashboard/:facultyId/applyLeave", async (req, res) => {
@@ -289,11 +295,15 @@ app.get("/staffdashboard/:staffId/applyLeave", async (req, res) => {
 
 app.post("/staffdashboard/:staffId/applyLeave", async (req, res) => {
   const { name, from_date, to_date, reason } = req.body;
-  const staff_id = req.params.staffId; 
-  await insertStaffLeave({ staffId: staff_id, fromDate: from_date, toDate: to_date, reason: reason }); // Make sure to pass the correct object properties
+  const staff_id = req.params.staffId;
+  await insertStaffLeave({
+    staffId: staff_id,
+    fromDate: from_date,
+    toDate: to_date,
+    reason: reason,
+  }); // Make sure to pass the correct object properties
   res.redirect(`/staffdashboard/${staff_id}`);
 });
-
 
 // -------- Admin --------//
 app.get("/admin", (req, res) => {
@@ -355,43 +365,84 @@ app.post("/admin/staff/:staffId/delete", async (req, res) => {
 
 app.get("/admin/staff/attendance", async (req, res) => {
   const staffs = await getAllStaff();
-  const staffsOnLeave = await getAllStaffOnLeave();
+  const todayDate = new Date();
+  const formattedDate = todayDate.toISOString().slice(0, 10); // Getting YYYY-MM-DD format
+  const staffsOnLeave = await getAllStaffOnLeave(formattedDate);
+  console.log(staffsOnLeave);
+  console.log(staffs);
   res.render("Admin/staff/attendance", { staffs, staffsOnLeave });
 });
 
 app.post("/admin/staff/attendance", async (req, res) => {
-  const { attendance_present, attendance_absent, attendance_onleave } = req.body;
-  await markStaffsAttendance(
+  // Check if the form has already been submitted
+  if (req.session.formSubmitted) {
+    // Redirect to the edit page
+    res.redirect("/admin/staff/edit_attendance");
+  } else {
+    // Set the flag to indicate that the form has been submitted
+    req.session.formSubmitted = true;
+    
+    const { attendance_present, attendance_absent, attendance_onleave } =
+      req.body;
+      console.log(attendance_present, attendance_absent, attendance_onleave);
+    await markStaffsAttendance(
+      attendance_present,
+      attendance_absent,
+      attendance_onleave
+    );
+    res.redirect("/admin/staff/attendance");
+  }
+});
+
+// Edit page route
+app.get("/admin/staff/edit_attendance", async (req, res) => {
+  const staffs = await getAllStaff();
+  const todayDate = new Date();
+  const formattedDate = todayDate.toISOString().slice(0, 10); // Getting YYYY-MM-DD format
+  const staffsOnLeave = await getAllStaffOnLeave(formattedDate);
+  res.render("Admin/staff/mk", { staffs, staffsOnLeave });
+});
+
+app.post("/admin/staff/edit_attendance", async (req, res) => {
+  const { attendance_present, attendance_absent, attendance_onleave } =
+    req.body;
+    console.log(attendance_present, attendance_absent, attendance_onleave);
+  await updateStaffsAttendance(
     attendance_present,
     attendance_absent,
     attendance_onleave
   );
-  res.redirect("/admin/staff/attendance");
+  res.redirect("/admin/staff/edit_attendance");
 });
 
 app.get("/admin/staff/leave", async (req, res) => {
   const leaveRequests = await getAllStaffLeave();
-  res.render("Admin/leave/staff_leave", {leaveRequests: leaveRequests});
-})
+  res.render("Admin/leave/staff_leave", { leaveRequests: leaveRequests });
+});
 
 app.post("/admin/acceptLeave", async (req, res) => {
   const { leaveId, from_date, to_date } = req.body;
-  
+
   // Convert date strings to DATE format
   const formatDateToISO = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
   const formattedFromDate = formatDateToISO(from_date);
   const formattedToDate = formatDateToISO(to_date);
- 
+
   try {
-    await actionStaffLeave(leaveId, formattedFromDate, formattedToDate, 'approved');
-    res.redirect('/admin/staff/leave');
+    await actionStaffLeave(
+      leaveId,
+      formattedFromDate,
+      formattedToDate,
+      "approved"
+    );
+    res.redirect("/admin/staff/leave");
   } catch (error) {
     console.error("Error accepting leave:", error);
     res.status(500).send("Error accepting leave");
@@ -400,28 +451,32 @@ app.post("/admin/acceptLeave", async (req, res) => {
 
 app.post("/admin/rejectLeave", async (req, res) => {
   const { leaveId, from_date, to_date } = req.body;
-  
+
   // Convert date strings to DATE format
   const formatDateToISO = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
   const formattedFromDate = formatDateToISO(from_date);
   const formattedToDate = formatDateToISO(to_date);
- 
+
   try {
-    await actionStaffLeave(leaveId, formattedFromDate, formattedToDate, 'rejected');
-    res.redirect('/admin/staff/leave');
+    await actionStaffLeave(
+      leaveId,
+      formattedFromDate,
+      formattedToDate,
+      "rejected"
+    );
+    res.redirect("/admin/staff/leave");
   } catch (error) {
     console.error("Error accepting leave:", error);
     res.status(500).send("Error accepting leave");
   }
 });
-
 
 // Faculty routes
 app.get("/admin/faculty/view", async (req, res) => {
@@ -480,27 +535,32 @@ app.post("/admin/faculty/attendance", async (req, res) => {
 });
 app.get("/admin/faculty/leave", async (req, res) => {
   const leaveRequests = await getAllFacultyLeave();
-  res.render("Admin/leave/faculty_leave", {leaveRequests: leaveRequests});
-})
+  res.render("Admin/leave/faculty_leave", { leaveRequests: leaveRequests });
+});
 
 app.post("/admin/acceptFacultyLeave", async (req, res) => {
   const { leaveId, from_date, to_date } = req.body;
-  
+
   // Convert date strings to DATE format
   const formatDateToISO = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
   const formattedFromDate = formatDateToISO(from_date);
   const formattedToDate = formatDateToISO(to_date);
- 
+
   try {
-    await actionFacultyLeave(leaveId, formattedFromDate, formattedToDate, 'approved');
-    res.redirect('/admin/faculty/leave');
+    await actionFacultyLeave(
+      leaveId,
+      formattedFromDate,
+      formattedToDate,
+      "approved"
+    );
+    res.redirect("/admin/faculty/leave");
   } catch (error) {
     console.error("Error accepting leave:", error);
     res.status(500).send("Error accepting leave");
@@ -509,22 +569,27 @@ app.post("/admin/acceptFacultyLeave", async (req, res) => {
 
 app.post("/admin/rejectFacultyLeave", async (req, res) => {
   const { leaveId, from_date, to_date } = req.body;
-  
+
   // Convert date strings to DATE format
   const formatDateToISO = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
   const formattedFromDate = formatDateToISO(from_date);
   const formattedToDate = formatDateToISO(to_date);
- 
+
   try {
-    await actionFacultyLeave(leaveId, formattedFromDate, formattedToDate, 'rejected');
-    res.redirect('/admin/faculty/leave');
+    await actionFacultyLeave(
+      leaveId,
+      formattedFromDate,
+      formattedToDate,
+      "rejected"
+    );
+    res.redirect("/admin/faculty/leave");
   } catch (error) {
     console.error("Error rejecting leave:", error);
     res.status(500).send("Error rejecting leave");
