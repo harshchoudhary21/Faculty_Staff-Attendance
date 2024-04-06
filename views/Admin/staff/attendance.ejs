@@ -97,7 +97,7 @@
   <p class="date">
     <%= new Date().toDateString() %>
   </p>
-  <form action="/admin/staff/attendance" method="POST">
+  <form action="/admin/staff/edit_attendance" method="POST" id="attendanceForm">
     <table>
       <thead>
         <tr>
@@ -114,16 +114,16 @@
             <td>
               <% if (staffsOnLeave.find(s => s.staff_id === staff.sid)) { %>
                 <label>
-                  <input type="checkbox" name="attendance_onleave[<%= staff.sid %>]" value="onLeave" checked />
+                  <input type="checkbox" name="attendance_onleave[<%= staff.sid %>]" value="<%= staff.sid %>" checked />
                   On Leave
                 </label>
               <% } else { %>
                 <label>
-                  <input type="checkbox" name="attendance_present[<%= staff.sid %>]" value="<%= staff.sid %>"  />
+                  <input type="checkbox" name="attendance_present[<%= staff.sid %>]" value="<%= staff.sid %>" onclick="handlePresentCheckbox(this)" />
                   Present
                 </label>
                 <label>
-                  <input type="checkbox" name="attendance_absent[<%= staff.sid %>]" value="<%= staff.sid %>"  />
+                  <input type="checkbox" name="attendance_absent[<%= staff.sid %>]" value="<%= staff.sid %>" onclick="handleAbsentCheckbox(this)" />
                   Absent
                 </label>
               <% } %>
@@ -132,9 +132,24 @@
         <% }); %>
       </tbody>
     </table>
-    <a href="/admin/staff/edit_attendance">Edit</a>
     <button type="submit">Submit Attendance</button>
   </form>
+
+  <script>
+    function handlePresentCheckbox(checkbox) {
+      const absentCheckbox = checkbox.parentElement.nextElementSibling.querySelector('input[name^="attendance_absent"]');
+      if (checkbox.checked) {
+        absentCheckbox.checked = false; // Deselect "Absent" if "Present" is checked
+      }
+    }
+
+    function handleAbsentCheckbox(checkbox) {
+      const presentCheckbox = checkbox.parentElement.previousElementSibling.querySelector('input[name^="attendance_present"]');
+      if (checkbox.checked) {
+        presentCheckbox.checked = false; // Deselect "Present" if "Absent" is checked
+      }
+    }
+  </script>
 </body>
 
 </html>
