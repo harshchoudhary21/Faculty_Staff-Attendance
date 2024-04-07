@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapsis.com/css2?family=Poppins:wghts@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 *{
   margin:0;
@@ -8,11 +8,11 @@
   text-decoration:none;
   box-sizing:border-box;
   font-family:"Poppins",sans-serif;
+  color: #ECF0F5;
 }
 
 body{
-  background:#dfe9f5;
-  
+  background:#222D32;
 }
 
 .container{
@@ -25,16 +25,17 @@ nav{
   bottom:0;
   height:100vh;
   left:0;
-  background:#fff;
+  background:#1A2226;
   width:280px;
   overflow:hidden;
-  box-shadow:0 20px 35px rgba(0, 0, 0,0.1);
+  box-shadow:0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-right: 2px solid rgb(76, 174, 244);
 }
-
 .logo{
-  text-align:centre;
+  text-align:center;
   display:flex;
   margin:10px 0 10px;  
+  color: #ECF0F5;
 }
 
 .logo img{
@@ -52,7 +53,7 @@ nav{
 
 a{
   position:relative;
-  color:rgb(85, 83 ,83);
+  color:#ECF0F5;
   font-size:14px;
   display:table;
   width:280px;
@@ -66,17 +67,17 @@ nav .fas{
   top:5px;
   font-size:20px;
   text-align:center;
+  color: #ECF0F5;
 }
 
 .nav-item{
   position:relative;
   top:5px;
   margin-left:10px;
-  
 }
 
 a:hover{
-  background:#f9f9f9
+  background:#0DB8DE;
 }
 
 .logout{
@@ -89,6 +90,7 @@ a:hover{
   position:relative;
   padding:20px;
   width:100%;
+  background: #1A2226;
 }
 
 .main-top{
@@ -100,7 +102,7 @@ a:hover{
   position:absolute;
   right:0;
   margin:10px 30px;
-  color:rgb(11,109,109);
+  color:#0DB8DE;
   cursor:pointer;
 }
 
@@ -112,25 +114,27 @@ a:hover{
 .main-skills .card{
   width:25%;
   margin:15px;
-  background:#fff;
+  background:#1A2226;
   text-align:center;
   border-radius:20px;
   padding:10px;
-  box-shadow:0 20px 35px rgba(0,0,0,0,0.1);
+  box-shadow:0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 .main-skills .card h3{
   margin:20px;
   text-transform:capitalize;
+  color: #ECF0F5;
 }
 
 .main-skills .card p{
   font-size:12px;
+  color: #ECF0F5;
 }
 
 .main-skills .card button{
-  background:green;
-  color:#fff;
+  background:#0DB8DE;
+  color:#ECF0F5;
   padding:7px 15px;
   border-radius:10px;
   margin-top:15px;
@@ -138,13 +142,16 @@ a:hover{
 }
 
 .main-skills .card button:hover{
-  background:rgba(223,70,15,0.856);
+  background:#27EF9F;
 }
 
 .main-skills .card i{
   font-size:22px;
   padding:10px;
+  color: #ECF0F5;
 }
+
+/* Rest of the CSS code remains the same */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -287,3 +294,4 @@ a:hover{
 .js{
   color:rgb(28,98,179);
 }
+
