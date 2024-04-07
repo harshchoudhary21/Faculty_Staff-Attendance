@@ -394,6 +394,62 @@ async function updateStaffsAttendance(
   }
 }
 
+// get attendance of staff by staff id for this month
+async function getStaffAttendanceCount(staffId) {
+  const query = `SELECT COUNT(*) as totalDays FROM staff_attendance WHERE sid = ? AND MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())`;
+  try{
+    const results = await new Promise((resolve, reject) => {
+      connection.query(query, [staffId], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results[0]);
+        }
+      });
+    });
+    return results;
+  }catch(error){
+    throw error;
+  }
+}
+
+// get total no of staffs
+async function getTotalStaffCount() {
+  const query = `SELECT COUNT(*) as count FROM staff`;
+  try{
+    const results = await new Promise((resolve, reject) => {
+      connection.query(query, [], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results[0]);
+        }
+      });
+    });
+    return results;
+  }catch(error){
+    throw error;
+  }
+}
+
+async function getTotalLeavesTaken(staff_id) {
+  const query = `SELECT staff_id, COUNT(*) as count FROM staff_on_leave WHERE staff_id = 1 GROUP BY staff_id`;
+  try{
+    const results = await new Promise((resolve, reject) => {
+      connection.query(query, [staff_id], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results[0]);
+        }
+      });
+    });
+    return results;
+  }catch(error){
+    throw error;
+  }
+}
+
 module.exports = {
   insertStaff,
   getStaffByInsertId,
@@ -408,4 +464,7 @@ module.exports = {
   getAllStaffLeave,
   actionStaffLeave,
   getAllStaffOnLeave,
+  getStaffAttendanceCount,
+  getTotalStaffCount,
+  getTotalLeavesTaken
 };
