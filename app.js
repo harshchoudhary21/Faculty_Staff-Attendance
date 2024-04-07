@@ -41,6 +41,9 @@ const {
   getAllStaffLeave,
   actionStaffLeave,
   getAllStaffOnLeave,
+  getStaffAttendanceCount,
+  getTotalStaffCount,
+  getTotalLeavesTaken,
 } = require("./database_query/staff");
 
 app.use(
@@ -119,14 +122,17 @@ app.post("/staffLogin", async (req, res) => {
 //-----------------StaffDashboard---------------------
 app.get("/staffdashboard/:sid", isValidateStaff, async (req, res) => {
   const sid = req.params.sid;
-
+  const attendance = await getStaffAttendanceCount(sid);
+  const totalStaffObject = await getTotalStaffCount();
+  const totalStaff = totalStaffObject.totalStaff;
+  const totalLeavesTaken = await getTotalLeavesTaken(sid);
   try {
     const staff = await getStaffByInsertId(sid);
     if (!staff) {
       res.redirect("/login");
       return;
     }
-    res.render("Staff/dashboard/dashboard", { staff });
+    res.render("Staff/dashboard/dashboard2", { staff, attendance, totalStaff, totalLeavesTaken});
   } catch (error) {
     console.error("Error fetching staff details:", error);
     res.status(500).json({
