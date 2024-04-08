@@ -26,6 +26,9 @@ const {
   getAllFacultyLeave,
   actionFacultyLeave,
   getAllFacultyOnLeave,
+  getFacultyAttendance,
+  getTotalFaculty,
+  getTotalFacultyLeave,
 } = require("./database_query/faculty");
 const {
   insertStaff,
@@ -226,7 +229,10 @@ app.post("/facultyLogin", async (req, res) => {
 //-----------------FacultyDashboard---------------------
 app.get("/facultydashboard/:fid", isValidateFaculty, async (req, res) => {
   const fid = req.params.fid;
-
+  const attendance = await getFacultyAttendance(fid);
+  const totalFacultyObject = await getTotalFaculty();
+  const totalFaculty = totalFacultyObject.totalFaculty;
+  const totalFacultyLeaveTaken = await getTotalFacultyLeave(fid);
   try {
     const faculty = await getFacultyByInsertId(fid);
     const courses = await getFacultyCourses(fid);
@@ -234,7 +240,7 @@ app.get("/facultydashboard/:fid", isValidateFaculty, async (req, res) => {
       res.redirect("/login");
       return;
     }
-    res.render("Faculty/dashboard/dashboard", { faculty, courses });
+    res.render("Faculty/dashboard/dashboard2", { faculty, courses , attendance, totalFaculty, totalFacultyLeaveTaken});
   } catch (error) {
     console.error("Error fetching faculty details:", error);
     res.status(500).json({
