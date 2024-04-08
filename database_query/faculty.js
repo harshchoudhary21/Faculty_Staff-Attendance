@@ -248,7 +248,7 @@ async function insertFaculty(name, email, password, department, phone_number) {
   }
   async function getFacultyCourses(fid){
     const query = `
-        Select course_id,course_name from courses where course_id in (select course_id from teaches where fid = ?)`
+        Select course_id,course_name from courses where course_id in (select course_id from teaches where fid = 1)`
     try {
         const results = await new Promise((resolve, reject) => {
             connection.query(query, [fid], (error, results) => {
@@ -323,6 +323,63 @@ async function getAllFacultyOnLeave() {
   });
 }
 
+// get attendance of faculty by faculty id for this month
+async function getFacultyAttendance(fid) {
+  const query = `SELECT COUNT(*) as totalDays FROM faculty_attendance WHERE fid = ? AND MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())`;
+  try {
+    const results = await new Promise((resolve, reject) => {
+      connection.query(query, [fid], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results[0]);
+        }
+      });
+    });
+    return results;
+  }catch (error) {
+    throw error;
+  }
+}
+
+// get total no of faculty
+async function getTotalFaculty() {
+  const query = `SELECT COUNT(*) as count FROM faculty`;
+  try {
+    const results = await new Promise((resolve, reject) => {
+      connection.query(query, [], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results[0]);
+        }
+      });
+    });
+    return results;
+  }catch (error) {
+    throw error;
+  }
+}
+
+// get total no of leaves taken by faculty
+async function getTotalFacultyLeave(fid) {
+  const query = `SELECT faculty_id, COUNT(*) as count FROM faculty_on_leave WHERE faculty_id = ? AND status = 'approved' GROUP BY faculty_id`;
+  try {
+    const results = await new Promise((resolve, reject) => {
+      connection.query(query, [fid], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results[0]);
+        }
+      });
+    });
+    return results;
+  }catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   insertFaculty,
   getFacultyByInsertId,
@@ -336,5 +393,8 @@ module.exports = {
   insertFacultyLeave,
   getAllFacultyLeave,
   actionFacultyLeave,
-  getAllFacultyOnLeave
+  getAllFacultyOnLeave,
+  getFacultyAttendance,
+  getTotalFaculty,
+  getTotalFacultyLeave
 };
