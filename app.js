@@ -125,7 +125,9 @@ app.get("/staffdashboard/:sid", isValidateStaff, async (req, res) => {
   const attendance = await getStaffAttendanceCount(sid);
   const totalStaffObject = await getTotalStaffCount();
   const totalStaff = totalStaffObject.totalStaff;
-  const totalLeavesTaken = await getTotalLeavesTaken(sid);
+  const totalLeavesTakenObject = await getTotalLeavesTaken(sid);
+  const totalLeavesTaken = totalLeavesTakenObject.totalLeavesTaken;
+
   try {
     const staff = await getStaffByInsertId(sid);
     if (!staff) {
