@@ -9,7 +9,7 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f8e3e3, #e3f8f8);
+      background: #222D32;
       margin: 0;
       padding: 0;
       display: flex;
@@ -19,9 +19,10 @@
     }
 
     .leave-form {
-      background-color: #fff;
+      background-color: #1A2226;
       padding: 40px;
       border-radius: 10px;
+      border: 1px solid aqua;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       max-width: 500px;
       width: 100%;
@@ -29,6 +30,7 @@
       position: relative;
       overflow: hidden;
       animation: slideUp 0.8s ease;
+      color: #ECF0F5;
     }
 
     @keyframes slideUp {
@@ -45,7 +47,7 @@
     .leave-form h2 {
       margin-top: 0;
       font-size: 28px;
-      color: #333;
+      color: #ECF0F5;
       text-align: center;
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
@@ -61,19 +63,21 @@
       box-sizing: border-box;
       font-size: 16px;
       transition: border-color 0.3s ease;
+      background: #1A2226;
+      color: #ECF0F5;
     }
 
     .leave-form input[type="text"]:focus,
     .leave-form input[type="date"]:focus,
     .leave-form textarea:focus {
       outline: none;
-      border-color: #6c63ff;
+      border-color: #0DB8DE;
       box-shadow: 0 0 10px rgba(108, 99, 255, 0.3);
     }
 
     .leave-form input[type="submit"] {
-      background-color: #6c63ff;
-      color: #fff;
+      background-color: #0DB8DE;
+      color: #ECF0F5;
       border: none;
       padding: 14px 24px;
       border-radius: 6px;
@@ -86,7 +90,7 @@
     }
 
     .leave-form input[type="submit"]:hover {
-      background-color: #5a50e5;
+      background-color: #27EF9F;
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(108, 99, 255, 0.4);
     }
@@ -98,7 +102,7 @@
 
     .leave-form label {
       font-weight: 500;
-      color: #555;
+      color: #ECF0F5;
       display: block;
       margin-top: 20px;
     }
