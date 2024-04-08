@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty DashBoard</title>
+    <link rel="stylesheet" href="/Faculty/dashboard/style2.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <aside>
+            <div class="top">
+                <h2>Hello, <span class="danger"><%= faculty.name %>!</span></h2>
+            </div>
+            <div class="close" id="close-btn">
+                <span class="material-icons-sharp">close</span>
+            </div>
+            <div class="sidebar">
+                <a href="#" class="active">
+                    <span class="material-icons-sharp">grid_view </span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a href="/facultydashboard/<%= faculty.fid %>/profile">
+                    <span class="material-icons-sharp"> people</span>
+                    <h3>Profile</h3>
+                </a>
+                <a href="/facultydashboard/<%= faculty.fid %>/applyLeave">
+                    <span class="material-icons-sharp">contact_mail</span>
+                    <h3>Leave Requests</h3>
+                </a>
+                <a href="#">
+                    <span class="material-icons-sharp">settings </span>
+                    <h3>Settings</h3>
+                </a>
+                <a href="/logout">
+                    <span class="material-icons-sharp">logout</span>
+                    <h3>Logout</h3>
+                </a>
+
+            </div>
+        </aside>
+        <main>
+            <h1>Dashboard</h1>
+            <div class="date">
+                <input type="date">
+            </div>
+            <div class="insights">
+                <div class="attendance">
+                    <span class="material-icons-sharp">analytics</span>
+                    <div class="middle">
+                        <div class="left">
+                            <h3>Total Attendance</h3>
+                            <h1><%= attendance.length > 0 ? attendance[0].totalDays : 'No attendance data' %> / <%= new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() %></h1>
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx='38' cy='38' r='36'></circle>
+                            </svg>
+                            <div class="number">
+                                <p><%= attendance.length > 0 ? ((attendance[0].totalDays / new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()) * 100).toFixed(2) : '0' %>%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="text-mute">This month</small>
+                </div>
+                <div class="Staff">
+                    <span class="material-icons-sharp">groups</span>
+                    <div class="middle">
+                        <div class="left">
+                            <h3>Total Faculty</h3>
+                            <h1><%= totalFaculty %></h1>
+                        </div>
+                    </div>
+                    <small class="text-mute">Overall</small>
+                </div>
+                <div class="Leaves">
+                    <span class="material-icons-sharp">groups</span>
+                    <div class="middle">
+                        <div class="left">
+                            <h3>Total Leaves Taken</h3>
+                            <h1><%= totalFacultyLeaveTaken %></h1>
+                        </div>
+                    </div>
+                    <small class="text-mute">This Year</small>
+                </div>
+            </div>
+            <div class="staff-attendance">
+                <h2>My Courses</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Course ID</th>
+                            <th>Course Name</th>
+                            <th>Apply Leave</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% courses.forEach(function(course) { %>
+                            <tr>
+                                <td><%= course.course_id %></td>
+                                <td><%= course.course_name %></td>
+                                <td><a href="/facultydashboard/<%= faculty.fid %>/applyLeave">Apply Leave</a></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+        <div class="right">
+            <div class="top">
+                <button class="menu-btn">
+                    <span class="material-icons-sharp">menu</span>
+                </button>
+                <div class="theme-toggler">
+                    <span class="material-icons-sharp active">light_mode</span>
+                    <span class="material-icons-sharp">dark_mode</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!-- partial -->
+<script src="/Faculty/dashboard/script2.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-beta1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-beta1/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</body>
+
+</html>
