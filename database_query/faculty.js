@@ -344,7 +344,7 @@ async function getFacultyAttendance(fid) {
 
 // get total no of faculty
 async function getTotalFaculty() {
-  const query = `SELECT COUNT(*) as count FROM faculty`;
+  const query = `SELECT COUNT(*) as totalFaculty FROM faculty`;
   try {
     const results = await new Promise((resolve, reject) => {
       connection.query(query, [], (error, results) => {

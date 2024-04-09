@@ -434,7 +434,7 @@ async function getTotalStaffCount() {
 
 // get total no of leaves taken by staff
 async function getTotalLeavesTaken(staff_id) {
-  const query = `SELECT staff_id, COUNT(*) as count FROM staff_on_leave WHERE staff_id = ? AND status = 'approved' GROUP BY staff_id`;
+  const query = `SELECT staff_id, COUNT(*) as totalLeavesTaken FROM staff_on_leave WHERE staff_id = ? AND status = 'approved' GROUP BY staff_id`;
   try{
     const results = await new Promise((resolve, reject) => {
       connection.query(query, [staff_id], (error, results) => {

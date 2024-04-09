@@ -127,10 +127,10 @@ app.get("/staffdashboard/:sid", isValidateStaff, async (req, res) => {
   const sid = req.params.sid;
   const attendance = await getStaffAttendanceCount(sid);
   const totalStaffObject = await getTotalStaffCount();
-  const totalStaff = totalStaffObject.totalStaff;
+  const totalStaff = totalStaffObject.count;
   const totalLeavesTakenObject = await getTotalLeavesTaken(sid);
   const totalLeavesTaken = totalLeavesTakenObject.totalLeavesTaken;
-
+  console.log(totalLeavesTaken);
   try {
     const staff = await getStaffByInsertId(sid);
     if (!staff) {
@@ -234,8 +234,12 @@ app.get("/facultydashboard/:fid", isValidateFaculty, async (req, res) => {
   const attendance = await getFacultyAttendance(fid);
   const totalFacultyObject = await getTotalFaculty();
   const totalFaculty = totalFacultyObject.totalFaculty;
-  const totalFacultyLeaveTaken = await getTotalFacultyLeave(fid);
-  try {
+  const totalFacultyLeaveTakenObject = await getTotalFacultyLeave(fid);
+  const totalFacultyLeaveTaken = totalFacultyLeaveTakenObject.count;
+  // console.log(totalFacultyLeaveTaken);
+  console.log(typeof attendance);
+  console.log(attendance);
+  try { 
     const faculty = await getFacultyByInsertId(fid);
     const courses = await getFacultyCourses(fid);
     if (!faculty) {
