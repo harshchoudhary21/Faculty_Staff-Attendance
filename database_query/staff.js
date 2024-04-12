@@ -245,6 +245,7 @@ function getStaffStatus(staffId) {
   });
 }
 
+
 async function insertStaffLeave(leaveData) {
   const { staffId, fromDate, toDate, reason } = leaveData;
   const status = "pending"; // Assuming leave requests are initially set as pending
@@ -450,6 +451,92 @@ async function getTotalLeavesTaken(staff_id) {
     throw error;
   }
 }
+async function archiveAndDeleteStaff(sid) {
+  try {
+    await new Promise((resolve, reject) => {
+      connection.query("INSERT INTO archived_staff SELECT * FROM staff WHERE sid = ?", [sid], function(err, results) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      connection.query("INSERT INTO archived_staff_attendance SELECT * FROM staff_attendance WHERE sid = ?", [sid], function(err, results) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      connection.query("INSERT INTO archived_staff_on_leave SELECT * FROM staff_on_leave WHERE staff_id = ?", [sid], function(err, results) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      connection.query("DELETE FROM staff_attendance WHERE sid = ?", [sid], function(err, results) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      connection.query("DELETE FROM staff_on_leave WHERE staff_id = ?", [sid], function(err, results) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      connection.query("DELETE FROM staff WHERE sid = ?", [sid], function(err, results) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    console.log('Staff member and their attendance records deleted successfully');
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function getApprovedLeaves(staffId) {
+  const query = `SELECT * FROM staff_on_leave WHERE staff_id = ? AND status = 'approved'`;
+  try {
+    const results = await new Promise((resolve, reject) => {
+      connection.query(query, [staffId], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+    return results;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 module.exports = {
   insertStaff,
@@ -467,5 +554,7 @@ module.exports = {
   getAllStaffOnLeave,
   getStaffAttendanceCount,
   getTotalStaffCount,
-  getTotalLeavesTaken
+  getTotalLeavesTaken,
+  archiveAndDeleteStaff,
+  getApprovedLeaves
 };

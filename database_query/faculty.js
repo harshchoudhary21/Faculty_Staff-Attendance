@@ -282,7 +282,9 @@ async function insertFacultyLeave(fid, from_date, to_date, Description) {
 
 // Get all faculty leave
 async function getAllFacultyLeave() {
-  const query = `SELECT * FROM faculty_on_leave`;
+  const query = `SELECT name, from_date, to_date, Description, status, faculty_id
+  FROM faculty_on_leave AS fl LEFT JOIN faculty as f  
+  on f.fid = fl.faculty_id`;
   return new Promise((resolve, reject) => {
     connection.query(query, [], (err, results) => {
       if (err) {
@@ -310,17 +312,25 @@ async function actionFacultyLeave(fid, from_date, to_date, status) {
 }
 
 // Get all faculty on leave
-async function getAllFacultyOnLeave() {
-  const query = `SELECT * FROM faculty_on_leave WHERE status = 'approved'`;
-  return new Promise((resolve, reject) => {
-    connection.query(query, [], (err, results) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(results);
+async function getAllFacultyOnLeave(date) {
+  const query = `SELECT fl.faculty_id, f.name, fl.from_date, fl.to_date, fl.Description, fl.status
+                 FROM faculty_on_leave AS fl
+                 INNER JOIN faculty AS f ON fl.faculty_id = f.fid
+                 WHERE fl.status = 'approved' AND DATE('${date}') BETWEEN fl.from_date AND fl.to_date`;
+  try {
+    const results = await new Promise((resolve, reject) => {
+      connection.query(query, [], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
     });
-  });
+    return results;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // get attendance of faculty by faculty id for this month
@@ -379,6 +389,90 @@ async function getTotalFacultyLeave(fid) {
     throw error;
   }
 }
+async function archiveAndDeleteFaculty(fid) {
+  try {
+    await new Promise((resolve, reject) => {
+      connection.query("INSERT INTO archived_faculty SELECT * FROM faculty WHERE fid = ?", [fid], function(err, results) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      connection.query("INSERT INTO archived_faculty_attendance SELECT * FROM faculty_attendance WHERE fid = ?", [fid], function(err, results) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      connection.query("INSERT INTO archived_faculty_on_leave SELECT * FROM faculty_on_leave WHERE faculty_id = ?", [fid], function(err, results) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      connection.query("DELETE FROM faculty_attendance WHERE fid = ?", [fid], function(err, results) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      connection.query("DELETE FROM faculty_on_leave WHERE faculty_id = ?", [fid], function(err, results) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      connection.query("DELETE FROM faculty WHERE fid = ?", [fid], function(err, results) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+
+    console.log('Faculty member and their attendance records deleted successfully');
+  } catch (error) {
+    console.error(error);
+  }
+}
+async function getApprovedLeavesForFaculty(facultyId) {
+  const query = `SELECT * FROM faculty_on_leave WHERE faculty_id = ? AND status = 'approved'`;
+  try {
+    const results = await new Promise((resolve, reject) => {
+      connection.query(query, [facultyId], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+    return results;
+  } catch (error) {
+    throw error;
+  }
+}
 
 module.exports = {
   insertFaculty,
@@ -396,5 +490,7 @@ module.exports = {
   getAllFacultyOnLeave,
   getFacultyAttendance,
   getTotalFaculty,
-  getTotalFacultyLeave
+  getTotalFacultyLeave,
+  archiveAndDeleteFaculty,
+  getApprovedLeavesForFaculty
 };

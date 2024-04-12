@@ -19,6 +19,7 @@
     <p><strong>Phone-Number: </strong> <%= staff.phone_number %></p>
 </div>
 <!-- partial -->
+<a href="#" class="logout" onclick="goBack()">Go Back</a>
 <script>
     var nameElement = document.getElementById('name');
     var profilePictureElement = document.getElementById('profile-picture');
@@ -27,6 +28,9 @@
     var firstLetter = name.charAt(0);
 
     profilePictureElement.textContent = firstLetter;
+    function goBack() {
+        window.history.back();
+    }
 </script>
 </body>
 </html>

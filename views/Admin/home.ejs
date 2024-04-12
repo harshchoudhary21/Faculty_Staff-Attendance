@@ -82,10 +82,36 @@
         color:#0DB8DE;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
       }
+      .header {
+        position: absolute;
+        top: 20px; /* Adjust as needed */
+        left: 20px; /* Adjust as needed */
+      }
+      .logout {
+        position: absolute;
+        top: 20px; /* Adjust as needed */
+        right: 20px; /* Adjust as needed */
+        padding: 10px 20px;
+        background-color: #ff0000;
+        color: #fff;
+        border-radius: 30px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .logout:hover {
+        background-color: #f13b3b;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+      }
     </style>
   </head>
-  <h1 class="heading">ADMIN PANEL</h1>
+ 
   <body>
+    <div class="header">
+      <h1 class="heading">ADMIN PANEL</h1>
+    </div>
   
     <div class="card">
       <h1>Staff</h1>
@@ -102,5 +128,6 @@
       <a href="/admin/staff/leave">Staff leave</a>
       <a href="/admin/faculty/leave">Faculty leave</a>
     </div>
+    <a href="/admin/login" class="logout">Logout</a>
   </body>
 </html>

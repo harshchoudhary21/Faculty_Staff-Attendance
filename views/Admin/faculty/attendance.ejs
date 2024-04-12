@@ -1,125 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faculty Attendance</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #1A2226;
-            animation: backgroundAnimation 10s ease infinite;
-            margin: 0;
-            padding: 20px;
-        }
-        @keyframes backgroundAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        h1 {
-            text-align: center;
-            color: #0DB8DE;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 1s ease;
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-        .date {
-            color: #ff6600;
-            font-weight: bold;
-            text-align: center;
-            animation: slideIn 1s ease;
-        }
-        @keyframes slideIn {
-            0% { transform: translateX(-100px); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
-        }
-        form {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            animation: slideIn 1s ease;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            background-color: transparent;
-        }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-            font-weight: 600;
-            color: #333;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        tr:hover {
-            background-color: #e6e6e6;
-        }
-        label {
-            display: inline-block;
-            margin-right: 10px;
-        }
-        button[type="submit"] {
-            display: block;
-            margin: 20px auto 0;
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-        }
-        button[type="submit"]:hover {
-            background-color: #45a049;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faculty Attendance</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #1A2226;
+        animation: backgroundAnimation 10s ease infinite;
+        margin: 0;
+        padding: 20px;
+    }
+    @keyframes backgroundAnimation {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    h1 {
+        text-align: center;
+        color: #0DB8DE;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1s ease;
+    }
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    .date {
+        color: #ff6600;
+        font-weight: bold;
+        text-align: center;
+        animation: slideIn 1s ease;
+    }
+    @keyframes slideIn {
+        0% { transform: translateX(-100px); opacity: 0; }
+        100% { transform: translateX(0); opacity: 1; }
+    }
+    form {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        animation: slideIn 1s ease;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        background-color: transparent;
+    }
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+        font-weight: 600;
+        color: #333;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    tr:hover {
+        background-color: #e6e6e6;
+    }
+    label {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    button[type="submit"] {
+        display: block;
+        margin: 20px auto 0;
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    .header {
+        position: absolute;
+        top: 20px; /* Adjust as needed */
+        left: 20px; /* Adjust as needed */
+      }
+      .logout {
+        position: absolute;
+        top: 20px; /* Adjust as needed */
+        right: 20px; /* Adjust as needed */
+        padding: 10px 20px;
+        background-color: #ff0000;
+        color: #fff;
+        border-radius: 30px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .logout:hover {
+        background-color: #f13b3b;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+      }
+</style>
 </head>
+
+
 <body>
-    <h1>Faculty Attendance</h1>
-    <p class="date"><%= new Date().toDateString() %></p>
-    <form action="/admin/faculty/attendance" method="POST">
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Attendance</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% faculties.forEach(faculty => { %>
-                    <tr>
-                        <td><%= faculty.name %></td>
-                        <td>
-                            <label>
-                                <input type="checkbox" name="attendance_present[<%= faculty.fid %>]" value="<%= faculty.fid %>"> Present
-                            </label>
-                            <label>
-                                <input type="checkbox" name="attendance_absent[<%= faculty.fid %>]" value="<%= faculty.fid %>"> Absent
-                            </label>
-                            <label>
-                                <input type="checkbox" name="attendance_onleave[<%= faculty.fid %>]" value="<%= faculty.fid %>"> On Leave
-                            </label>
-                        </td>
-                    </tr>
-                <% }) %>
-            </tbody>
-        </table>
-        <button type="submit">Submit Attendance</button>
-    </form>
+  <h1>Faculty Attendance</h1>
+  <p class="date">
+    <%= new Date().toDateString() %>
+  </p>
+  <form action="/admin/faculty/attendance" method="POST" id="attendanceForm">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Attendance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% facultys.forEach(faculty => { %>
+          <tr>
+            <td>
+              <%= faculty.name %>
+            </td>
+            <td>
+              <% if (facultysOnLeave.find(s => s.faculty_id === faculty.fid)) { %>
+                <label>
+                  <input type="checkbox" name="attendance_onleave[<%= faculty.fid %>]" value="<%= faculty.fid %>" checked />
+                  On Leave
+                </label>
+              <% } else { %>
+                <label>
+                  <input type="checkbox" name="attendance_present[<%= faculty.fid %>]" value="<%= faculty.fid %>" onclick="handlePresentCheckbox(this)" />
+                  Present
+                </label>
+                <label>
+                  <input type="checkbox" name="attendance_absent[<%= faculty.fid %>]" value="<%= faculty.fid %>" onclick="handleAbsentCheckbox(this)" />
+                  Absent
+                </label>
+              <% } %>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+    <button type="submit">Submit Attendance</button>
+  </form>
+
+  <script>
+    function handlePresentCheckbox(checkbox) {
+      const absentCheckbox = checkbox.parentElement.nextElementSibling.querySelector('input[name^="attendance_absent"]');
+      if (checkbox.checked) {
+        absentCheckbox.checked = false; // Deselect "Absent" if "Present" is checked
+      } else {
+        absentCheckbox.checked = true; // Select "Absent" if "Present" is unchecked
+      }
+    }
+  
+    function handleAbsentCheckbox(checkbox) {
+      const presentCheckbox = checkbox.parentElement.previousElementSibling.querySelector('input[name^="attendance_present"]');
+      if (checkbox.checked) {
+        presentCheckbox.checked = false; // Deselect "Present" if "Absent" is checked
+      } else {
+        presentCheckbox.checked = true; // Select "Present" if "Absent" is unchecked
+      }
+    }
+  </script>
+  <a href="/admin/goback" class="logout">Go Back</a>
 </body>
+
 </html>

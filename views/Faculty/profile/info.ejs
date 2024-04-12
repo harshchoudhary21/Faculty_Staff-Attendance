@@ -18,6 +18,7 @@
     <p><strong>Department: </strong> <%= faculty.department %></p>
     <p><strong>Phone-Number:</strong> <%= faculty.phone_number %></p>
 </div>
+<a href="#" class="logout" onclick="goBack()">Go Back</a>
 <!-- partial -->
 <script>
     var nameElement = document.getElementById('name');
@@ -27,6 +28,10 @@
     var firstLetter = name.charAt(0);
 
     profilePictureElement.textContent = firstLetter;
+
+    function goBack() {
+        window.history.back();
+    }
 </script>
 </body>
 </html>

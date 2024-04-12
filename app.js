@@ -29,7 +29,10 @@ const {
   getFacultyAttendance,
   getTotalFaculty,
   getTotalFacultyLeave,
+  archiveAndDeleteFaculty,
+  getApprovedLeavesForFaculty
 } = require("./database_query/faculty");
+
 const {
   insertStaff,
   getStaffByEmailAndPassword,
@@ -47,6 +50,9 @@ const {
   getStaffAttendanceCount,
   getTotalStaffCount,
   getTotalLeavesTaken,
+  archiveAndDeleteStaff,
+  getApprovedLeaves
+
 } = require("./database_query/staff");
 
 app.use(
@@ -68,6 +74,9 @@ app.get("/login", (req, res) => {
 });
 app.get("/register", (req, res) => {
   res.render("registerAs");
+});
+app.get("/admin/login", (req, res) => {
+  res.render("Admin/login");
 });
 //----------------------Staff----------------------
 function isValidateStaff(req, res, next) {
@@ -131,13 +140,24 @@ app.get("/staffdashboard/:sid", isValidateStaff, async (req, res) => {
   const totalLeavesTakenObject = await getTotalLeavesTaken(sid);
   const totalLeavesTaken = totalLeavesTakenObject.totalLeavesTaken;
   console.log(totalLeavesTaken);
+  function getWorkingDaysInMonth(year, month) {
+    let count = 0;
+    let date = new Date(year, month, 1);
+    while (date.getMonth() === month) {
+      if (date.getDay() !== 0 && date.getDay() !== 6) {
+        count++;
+      }
+      date.setDate(date.getDate() + 1);
+    }
+    return count;
+  }
   try {
     const staff = await getStaffByInsertId(sid);
     if (!staff) {
       res.redirect("/login");
       return;
     }
-    res.render("Staff/dashboard/dashboard2", { staff, attendance, totalStaff, totalLeavesTaken});
+    res.render("Staff/dashboard/dashboard2", { staff, attendance, totalStaff, totalLeavesTaken, getWorkingDaysInMonth});
   } catch (error) {
     console.error("Error fetching staff details:", error);
     res.status(500).json({
@@ -235,18 +255,28 @@ app.get("/facultydashboard/:fid", isValidateFaculty, async (req, res) => {
   const totalFacultyObject = await getTotalFaculty();
   const totalFaculty = totalFacultyObject.totalFaculty;
   const totalFacultyLeaveTakenObject = await getTotalFacultyLeave(fid);
-  const totalFacultyLeaveTaken = totalFacultyLeaveTakenObject.count;
-  // console.log(totalFacultyLeaveTaken);
+  const totalFacultyLeaveTaken = totalFacultyLeaveTakenObject ? totalFacultyLeaveTakenObject.count : 0;  // console.log(totalFacultyLeaveTaken);
   console.log(typeof attendance);
   console.log(attendance);
-  try { 
+  function getWorkingDaysInMonth(year, month) {
+    let count = 0;
+    let date = new Date(year, month, 1);
+    while (date.getMonth() === month) {
+      if (date.getDay() !== 0 && date.getDay() !== 6) {
+        count++;
+      }
+      date.setDate(date.getDate() + 1);
+    }
+    return count;
+  }
+  try {
     const faculty = await getFacultyByInsertId(fid);
     const courses = await getFacultyCourses(fid);
     if (!faculty) {
       res.redirect("/login");
       return;
     }
-    res.render("Faculty/dashboard/dashboard2", { faculty, courses , attendance, totalFaculty, totalFacultyLeaveTaken});
+    res.render("Faculty/dashboard/dashboard2", { faculty, courses, attendance, totalFaculty, totalFacultyLeaveTaken, getWorkingDaysInMonth });
   } catch (error) {
     console.error("Error fetching faculty details:", error);
     res.status(500).json({
@@ -377,8 +407,13 @@ app.get("/admin/staff/:staffId/profile", async (req, res) => {
 });
 
 app.post("/admin/staff/:staffId/delete", async (req, res) => {
-  await deleteStaffByInsertId(req.params.staffId);
-  res.redirect("/admin/staff/view");
+  try {
+    await archiveAndDeleteStaff(req.params.staffId);
+    res.redirect("/admin/staff/view");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error deleting staff member');
+  }
 });
 
 app.get("/admin/staff/attendance", async (req, res) => {
@@ -392,46 +427,27 @@ app.get("/admin/staff/attendance", async (req, res) => {
 });
 
 app.post("/admin/staff/attendance", async (req, res) => {
-  // Check if the form has already been submitted
-  if (req.session.formSubmitted) {
-    // Redirect to the edit page
-    res.redirect("/admin/staff/edit_attendance");
-  } else {
-    // Set the flag to indicate that the form has been submitted
-    req.session.formSubmitted = true;
 
-    const { attendance_present, attendance_absent, attendance_onleave } =
-      req.body;
-    console.log(attendance_present, attendance_absent, attendance_onleave);
-    await markStaffsAttendance(
-      attendance_present,
-      attendance_absent,
-      attendance_onleave
-    );
-    res.redirect("/admin/staff/attendance");
-  }
-});
-
-// Edit page route
-app.get("/admin/staff/edit_attendance", async (req, res) => {
-  const staffs = await getAllStaff();
-  const todayDate = new Date();
-  const formattedDate = todayDate.toISOString().slice(0, 10); // Getting YYYY-MM-DD format
-  const staffsOnLeave = await getAllStaffOnLeave(formattedDate);
-  res.render("Admin/staff/mk", { staffs, staffsOnLeave });
-});
-
-app.post("/admin/staff/edit_attendance", async (req, res) => {
   const { attendance_present, attendance_absent, attendance_onleave } =
     req.body;
   console.log(attendance_present, attendance_absent, attendance_onleave);
-  await updateStaffsAttendance(
+  await markStaffsAttendance(
     attendance_present,
     attendance_absent,
     attendance_onleave
   );
-  res.redirect("/admin/staff/edit_attendance");
+  res.redirect("/admin/staff/thanks");
+
 });
+
+app.get("/admin/staff/thanks", async (req, res) => {
+  res.render("Admin/staff/thanks");
+});
+
+
+// Edit page route
+
+
 
 app.get("/admin/staff/leave", async (req, res) => {
   const leaveRequests = await getAllStaffLeave();
@@ -532,14 +548,23 @@ app.get("/admin/faculty/:facultyId/profile", async (req, res) => {
 });
 
 app.post("/admin/faculty/:facultyId/delete", async (req, res) => {
-  await deleteFacultyByInsertId(req.params.facultyId);
-  res.redirect("/admin/faculty/view");
+  try {
+    await archiveAndDeleteFaculty(req.params.facultyId);
+    res.redirect("/admin/faculty/view");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error deleting faculty member');
+  }
 });
 
 app.get("/admin/faculty/attendance", async (req, res) => {
-  const faculties = await getAllFaculty();
-  const facultiesOnLeave = await getAllFacultyOnLeave();
-  res.render("Admin/faculty/attendance", { faculties, facultiesOnLeave });
+  const facultys = await getAllFaculty();
+  const todayDate = new Date();
+  const formattedDate = todayDate.toISOString().slice(0, 10); 
+  const facultysOnLeave = await getAllFacultyOnLeave(formattedDate);
+  console.log(facultysOnLeave);
+
+  res.render("Admin/faculty/attendance", { facultys, facultysOnLeave });
 });
 app.post("/admin/faculty/attendance", async (req, res) => {
   const { attendance_present, attendance_absent, attendance_onleave } =
@@ -549,8 +574,13 @@ app.post("/admin/faculty/attendance", async (req, res) => {
     attendance_absent,
     attendance_onleave
   );
-  res.redirect("/admin/faculty/attendance");
+  res.redirect("/admin/faculty/thanks");
 });
+
+app.get("/admin/faculty/thanks", async (req, res) => {
+  res.render("Admin/faculty/thanks");
+});
+
 app.get("/admin/faculty/leave", async (req, res) => {
   const leaveRequests = await getAllFacultyLeave();
   res.render("Admin/leave/faculty_leave", { leaveRequests: leaveRequests });
@@ -611,6 +641,61 @@ app.post("/admin/rejectFacultyLeave", async (req, res) => {
   } catch (error) {
     console.error("Error rejecting leave:", error);
     res.status(500).send("Error rejecting leave");
+  }
+});
+app.get("/admin/goBack", (req, res) => {
+  res.redirect("/Admin/dashboard");
+});
+app.get("/admin/goback2", (req, res) => {
+  res.redirect("/admin/faculty/view");
+});
+app.get("/admin/goback3", (req, res) => {
+  res.redirect("/admin/staff/view");
+});
+app.get("/admin/goback4", (req, res) => {
+  res.redirect("/facultydashboard/:fid");
+});
+// app.get('/viewRecords/:facultyId', async (req, res) => {
+//   try {
+//     // Fetch facultyStatus from your database or compute it here
+//     const facultyStatus = await getFacultyStatus(req.params.facultyId);
+
+//     // Pass facultyStatus to the template
+//     res.render('Faculty/leaverecord/leave', { facultyStatus });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Error fetching faculty status');
+//   }
+// });
+// app.get('/viewStaffRecords/:staffId', async (req, res) => {
+//   try {
+//     // Fetch staffStatus from your database or compute it here
+//     //const staff = await getStaffByInsertId(req.params.staffId);
+//     const staffStatus = await getStaffStatus(req.params.staffId);
+
+//     // Pass staffStatus to the template
+//     res.render('Staff/leaverecord/leave', { staffStatus });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Error fetching staff status');
+//   }
+// });
+app.get('/viewStaffRecords/:staffId', async (req, res) => {
+  try {
+    const staffStatus = await getApprovedLeaves(req.params.staffId);
+    res.render('Staff/leaverecord/leave', { staffStatus });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching staff status');
+  }
+});
+app.get('/viewRecords/:facultyId', async (req, res) => {
+  try {
+    const facultyStatus = await getApprovedLeavesForFaculty(req.params.facultyId);
+    res.render('Faculty/leaverecord/leave', { facultyStatus });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching faculty status');
   }
 });
 const PORT = 4000;

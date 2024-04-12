@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #35ec7b;
+            background-color: #1A2226;
             margin: 0;
             padding: 0;
         }
@@ -15,10 +15,11 @@
             max-width: 1000px;
             margin: 50px auto;
             padding: 20px;
-            background-color: #8a973c;
+            background-color: #1A2226;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             animation: fadeIn 0.8s ease-in-out;
+            border: #02afff solid 2px;
         }
         @keyframes fadeIn {
             0% { opacity: 0; }
@@ -26,7 +27,7 @@
         }
         h1 {
             text-align: center;
-            color: #333;
+            color: #04f2f6;
             margin-bottom: 20px;
         }
         .profile-info {
@@ -35,13 +36,14 @@
             gap: 20px;
         }
         .profile-card {
-            background-color: #fff;
+            background-color: #1A2226;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             overflow: hidden;
+            border: #04f2f6 solid 2px;
         }
         .profile-card:hover {
             transform: translateY(-5px);
@@ -54,7 +56,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 128, 0, 0.2);
+            background-color: rgba(5, 173, 240, 0.2);
             transition: left 0.5s ease;
             z-index: -1;
         }
@@ -63,7 +65,7 @@
         }
         .profile-card label {
             font-weight: bold;
-            color: #555;
+            color: #fff;
             margin-bottom: 8px;
         }
         .profile-card p {
@@ -76,6 +78,29 @@
             font-weight: normal;
             color: #333;
         }
+        .header {
+        position: absolute;
+        top: 20px; /* Adjust as needed */
+        left: 20px; /* Adjust as needed */
+      }
+      .logout {
+        position: absolute;
+        top: 20px; /* Adjust as needed */
+        right: 20px; /* Adjust as needed */
+        padding: 10px 20px;
+        background-color: #ff0000;
+        color: #fff;
+        border-radius: 30px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .logout:hover {
+        background-color: #f13b3b;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+      }
     </style>
 </head>
 <body>
@@ -116,5 +141,6 @@
             </div>
         </div>
     </div>
+    <a href="/admin/goback2" class="logout">Go Back</a>
 </body>
 </html>

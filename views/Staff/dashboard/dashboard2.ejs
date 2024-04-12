@@ -32,9 +32,9 @@
                     <span class="material-icons-sharp">contact_mail</span>
                     <h3>Leave Requests</h3>
                 </a>
-                <a href="#">
-                    <span class="material-icons-sharp">settings </span>
-                    <h3>Settings</h3>
+                <a href="/viewStaffRecords/<%= staff.sid %>">
+                    <span class="material-icons-sharp">view_list </span>
+                    <h3>View LeaveRecord</h3>
                 </a>
                 <a href="/logout">
                     <span class="material-icons-sharp">logout</span>
@@ -45,24 +45,21 @@
         </aside>
         <main>
             <h1>Dashboard</h1>
-            <div class="date">
-                <input type="date">
-            </div>
+           
             <div class="insights">
                 <div class="attendance">
                     <span class="material-icons-sharp">analytics</span>
                     <div class="middle">
                         <div class="left">
                             <h3>Total Attendance</h3>
-                            <h1><%= attendance.totalDays ? attendance.totalDays : 'No attendance data' %> / <%= new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() %></h1>
+                            <h1><%= attendance.totalDays > 0 ? attendance.totalDays : 'No attendance data' %> / <%= getWorkingDaysInMonth(new Date().getFullYear(), new Date().getMonth()) %></h1>
                         </div>
                         <div class="progress">
                             <svg>
                                 <circle cx='38' cy='38' r='36'></circle>
                             </svg>
                             <div class="number">
-                                <p><%= attendance.totalDays > 0 ? ((attendance.totalDays / new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()) * 100).toFixed(2) : '0' %>%</p>
-                            </div>
+                                <p><%= attendance.totalDays > 0 ? ((attendance.totalDays / getWorkingDaysInMonth(new Date().getFullYear(), new Date().getMonth())) * 100).toFixed(2) : '0' %>%</p>                            </div>
                         </div>
                     </div>
                     <small class="text-mute">This month</small>
@@ -81,7 +78,7 @@
                     <span class="material-icons-sharp">groups</span>
                     <div class="middle">
                         <div class="left">
-                            <h3>Total Leaves Taken</h3>
+                            <h3>Total Leaves Applications</h3>
                             <h1><%= totalLeavesTaken %></h1>
                         </div>
                     </div>

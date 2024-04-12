@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Leave Records</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1A2226;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #fff;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #0DB8DE;
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f8f8;
+            transform: scale(1.01);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #0DB8DE;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px#0DB8DE;
+            }
+            to {
+                text-shadow: 0 0 20px #0DB8DE;
+            }
+        }
+        .logout {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #ff0000;
+            color: #fff;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logout:hover {
+            background-color: #f13b3b;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <h2>Past Leave Records</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>From Date</th>
+                <th>To Date</th>
+                <th>Reason</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% staffStatus.forEach(function(leave) { %>
+                <tr>
+                    <td><%= formatDate(leave.from_date) %></td>
+                    <td><%= formatDate(leave.to_date) %></td>
+                    <td><%= leave.reason %></td>
+                    <td><%= leave.status %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <a href="#" class="logout" onclick="goback()">Go Back</a>
+    <script>
+        function goback() {
+            window.history.back();
+        }
+    </script>
+    <% function formatDate(dateString) { %>
+        <% const date = new Date(dateString); %>
+        <% const formattedDate = date.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }); %>
+        <% return formattedDate; %>
+    <% } %>
+</body>
+</html>

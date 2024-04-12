@@ -21,6 +21,7 @@ function toggleDropdown() {
     document.getElementById("menu-dropdown-content").classList.toggle("show");
 }
 
+
 $(document).ready(function(){
     $(".dropbtn").click(function(){
         $(this).next(".dropdown-content").toggle();

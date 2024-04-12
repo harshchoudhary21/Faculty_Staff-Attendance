@@ -89,3 +89,26 @@ p {
   margin: auto;
   margin-bottom: 1rem;
 }
+.header {
+  position: absolute;
+  top: 20px; 
+  left: 20px; 
+}
+.logout {
+  position: absolute;
+  top: 20px;
+  right: 20px; 
+  padding: 10px 20px;
+  background-color: #ff0000;
+  color: #fff;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logout:hover {
+  background-color: #f13b3b;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
